@@ -4,13 +4,13 @@
 namespace Advanced2D
 {
 
-Timer::Timer(void)
+Timer::Timer()
 {
-	timer_start = timeGetTime();
+	mStart = getTimer();
 	reset();
 }
 
-Timer::~Timer(void)
+Timer::~Timer()
 {
 }
 
@@ -21,26 +21,26 @@ DWORD Timer::getTimer()
 
 DWORD Timer::getStartTimeMillis()
 {
-	return timeGetTime() - timer_start;
+	return getTimer() - mStart;
 }
 
-void Timer::sleep(int ms)
+void Timer::sleep(int aMillis)
 {
 	DWORD start = getTimer();
 
-	while (start + ms > getTimer());
+	while (start + aMillis > getTimer());
 }
 
 void Timer::reset()
 {
-	stopwatch_start = getTimer();
+	mStopWatchStart = getTimer();
 }
 
-bool Timer::stopwatch(int ms)
+bool Timer::stopwatch(int aMillis)
 {
-	if (timeGetTime() > stopwatch_start + ms)
+	if (getTimer() > mStopWatchStart + aMillis)
 	{
-		stopwatch_start = getTimer();
+		mStopWatchStart = getTimer();
 		return true;
 	}
 

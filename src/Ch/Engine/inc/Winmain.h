@@ -3,8 +3,8 @@
 
 #include <windows.h>
 
-LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-int WINAPI _tWinMain(HINSTANCE hThisInst, HINSTANCE hPrevInst, LPTSTR lpCmdArgs,
-                     int nWinMode);
+LRESULT WINAPI WinProc(HWND aHwnd, UINT aMsg, WPARAM aWparam, LPARAM aLparam);
+int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
+                     int aWinMode);
 
 #endif

@@ -57,21 +57,49 @@ set MSVC_VER=XX
 echo "***************************"
 echo Warning: Unknown MSVC version
 echo "***************************"
-set CMAKE_GENERATOR="Visual Studio 12"
 
 :VERSION_DETECTED
 set CURRENT_DIR=%CD%
 if not exist "%CURRENT_DIR%\build" mkdir "%CURRENT_DIR%\build"
 if not exist "%CURRENT_DIR%\build\MSVC%MSVC_VER%" mkdir "%CURRENT_DIR%\build\MSVC%MSVC_VER%"
 cd "%CURRENT_DIR%\build\MSVC%MSVC_VER%"
+if [] == [%CMAKE_GENERATOR%] goto DIRECT_CL_BUILD
+
 cmake %CURRENT_DIR%\src -G %CMAKE_GENERATOR%
+goto END_BUILD
+
+:DIRECT_CL_BUILD
+set CPP_FILES=
+for %%x in ("%CURRENT_DIR%\src\Ch\Engine\src\*.cpp") do set CPP_FILES=!CPP_FILES! "%%x"
+set CPP_FILES=%CPP_FILES:~1%
+cl /analyze /W4 /c /GS /D "WIN32" /D "_WINDOWS" /D "_LIB" /D "DIRECTINPUT_VERSION=0x0800" %CPP_FILES% /I "%CURRENT_DIR%\src\Ch\Engine\inc"
+
+set OBJ_FILES=
+for %%x in ("%CURRENT_DIR%\build\MSVC%MSVC_VER%\*.obj") do set OBJ_FILES=!OBJ_FILES! "%%x"
+set OBJ_FILES=%OBJ_FILES:~1%
+
+lib > nul
+if %ERRORLEVEL% NEQ 0 goto NO_LIB
+lib %OBJ_FILES% /out:"%CURRENT_DIR%\build\MSVC%MSVC_VER%\Engine.lib"
+goto DONE_ENGINE
+
+:NO_LIB
+link /lib %OBJ_FILES% /out:"%CURRENT_DIR%\build\MSVC%MSVC_VER%\Engine.lib"
+
+:DONE_ENGINE
+set CPP_FILES=
+for %%x in ("%CURRENT_DIR%\src\Ch\Samples\*.cpp") do set CPP_FILES=!CPP_FILES! "%%x"
+set CPP_FILES=%CPP_FILES:~1%
+cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "_LIB" /D "DIRECTINPUT_VERSION=0x0800" %CPP_FILES% kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
+
+:END_BUILD
 cd %CURRENT_DIR%
 
-goto end
+goto END
 
 :NO_CL_IN_PATH
 echo "*****************************************************************************"
 echo cl.exe not in the PATH, make sure you are running on 'Developer Command Prompt'
 echo "*****************************************************************************"
 
-:end
+:END

@@ -2,7 +2,7 @@
 #define __ADVANCED2D_H_
 
 #include "Timer.h"
-#include <TCHAR.H>
+#include <tchar.h>
 #include <d3dx9.h>
 
 #define VERSION_MAJOR 1
@@ -21,46 +21,46 @@ namespace Advanced2D
 class Engine
 {
 private:
-	unsigned short p_versionMajor, p_versionMinor, p_revision;
-	HWND p_windowHandle;
-	LPDIRECT3D9 p_d3d;
-	LPDIRECT3DDEVICE9 p_device;
-	LPDIRECT3DSURFACE9 p_backbuffer;
-	LPD3DXSPRITE p_sprite_handler;
-	_TCHAR p_apptitle[MAX_PATH];
-	bool p_fullscreen;
-	int p_screenwidth;
-	int p_screenheight;
-	int p_colordepth;
-	bool p_pauseMode;
-	D3DCOLOR p_ambientColor;
-	bool p_maximizeProcessor;
-	Timer p_coreTimer;
-	long p_frameCount_core;
-	long p_frameRate_core;
-	Timer p_realTimer;
-	long p_frameCount_real;
-	long p_frameRate_real;
+	unsigned short mVersionMajor, mVersionMinor, mRevision;
+	HWND mWindowHandle;
+	LPDIRECT3D9 mDirect3d;
+	LPDIRECT3DDEVICE9 mDirect3dDevice;
+	LPDIRECT3DSURFACE9 mBackbuffer;
+	LPD3DXSPRITE mSpriteHandler;
+	_TCHAR mTitle[MAX_PATH];
+	bool mFullScreen;
+	int mWidth;
+	int mHeight;
+	int mColorDepth;
+	bool mPause;
+	D3DCOLOR mAmbientColor;
+	bool mMaximizeProcessor;
+	Timer mCoreTimer;
+	long mFrameCountCore;
+	long mFrameRateCore;
+	Timer mRealTimer;
+	long mFrameCountReal;
+	long mFrameRateReal;
 
 public:
 	Engine();
 	virtual ~Engine();
-	int Init(int width, int height, int colordepth, bool fullscreen);
-	void Close();
-	void Update();
-	void message(const _TCHAR* message, const _TCHAR* title = TEXT("ADVANCED 2D"));
-	void fatalerror(const _TCHAR* message,
-	                const _TCHAR* title = TEXT("FATAL ERROR"));
-	void Shutdown();
-	void ClearScene(D3DCOLOR color);
-	void SetDefaultMaterial();
-	void SetAmbient(D3DCOLOR colorvalue);
-	int RenderStart();
-	int RenderStop();
-	int Release();
+	int init(int aWidth, int aHeight, int aColorDepth, bool aFullScreen);
+	void close();
+	void update();
+	void showMessage(const _TCHAR* aMessage,
+	                 const _TCHAR* aTitle = TEXT("ADVANCED 2D"));
+	void showFatalMessage(const _TCHAR* aMessage,
+	                      const _TCHAR* aTitle = TEXT("FATAL ERROR"));
+	void shutdown();
+	void clearScene(D3DCOLOR aColor);
+	void setDefaultMaterial();
+	void setAmbient(D3DCOLOR aColor);
+	int renderStart();
+	int renderStop();
 
 	bool isPaused();
-	void setPauser(bool value);
+	void setPauser(bool aPause);
 
 	LPDIRECT3DDEVICE9 getDevice();
 
@@ -68,33 +68,33 @@ public:
 
 	LPD3DXSPRITE getSpriteHandler();
 
-	void setWindowHandle(HWND hWnd);
+	void setWindowHandle(HWND aHwnd);
 	HWND getWindowHandle();
 
-	_TCHAR* getAppTitle(_TCHAR* value = NULL);
-	void setAppTitle(const _TCHAR* value);
+	_TCHAR* getAppTitle(_TCHAR* aTitle = NULL);
+	void setAppTitle(const _TCHAR* aTitle);
 
 	unsigned short getVersionMajor();
 	unsigned short getVersionMinor();
 	unsigned short getRevision();
-	_TCHAR* getVersionText(_TCHAR*);
+	_TCHAR* getVersionText(_TCHAR* aVersion);
 
 	long getFrameRate_core();
 	long getFrameRate_real();
 
 	int getScreenWidth();
-	void setScreenWidth(int value);
+	void setScreenWidth(int aWidth);
 	int getScreenHeight();
-	void setScreenHeight(int value);
+	void setScreenHeight(int aHeight);
 
 	int getColorDepth();
-	void setColorDepth(int value);
+	void setColorDepth(int aColorDepth);
 
 	bool getFullScreen();
-	void setFullScreen(bool value);
+	void setFullScreen(bool aFullScreen);
 
 	bool getMaximizeProcessor();
-	void setMaximizeProcessor(bool value);
+	void setMaximizeProcessor(bool aMaximizeProcessor);
 
 };
 }

@@ -4,31 +4,28 @@
 #include <time.h>
 #include <stdio.h>
 
-static HINSTANCE g_hIstance;
-static HWND g_hWnd = NULL;
-static int g_nCmdShow;
+static HINSTANCE gInstance;
+static HWND gHwnd = NULL;
+static int gCmdShow = 0;
 Advanced2D::Engine* g_engine;
 
-bool gameover;
+bool gameover = false;
 
-/*EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-#define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)*/
-
-int WINAPI _tWinMain(HINSTANCE hThisInst, HINSTANCE/*hPrevInst*/,
-                     LPTSTR/*lpCmdArgs*/, int nWinMode)
+int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
+                     int aWinMode)
 {
 	MSG msg;
 	srand((unsigned int)time(NULL));
-	g_hIstance = hThisInst;
-	g_nCmdShow = nWinMode;
+	gInstance = aInstance;
+	gCmdShow = aWinMode;
 	DWORD dwStyle, dwExStyle;
 	RECT windowRect;
 	g_engine = new Advanced2D::Engine();
 
 	if (!game_preload())
 	{
-		g_engine->Close();
-		MessageBox(g_hWnd, TEXT("Error in game preload!"), TEXT("Error"), MB_ICONERROR);
+		g_engine->close();
+		MessageBox(gHwnd, TEXT("Error in game preload!"), TEXT("Error"), MB_ICONERROR);
 		return -1;
 	}
 
@@ -44,7 +41,7 @@ int WINAPI _tWinMain(HINSTANCE hThisInst, HINSTANCE/*hPrevInst*/,
 	wc.lpfnWndProc = WinProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hInstance = hThisInst;
+	wc.hInstance = aInstance;
 	wc.hIcon = NULL;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = NULL;//(HBRUSH)(COLOR_WINDOW + 1);
@@ -54,8 +51,8 @@ int WINAPI _tWinMain(HINSTANCE hThisInst, HINSTANCE/*hPrevInst*/,
 
 	if (!RegisterClassEx(&wc))
 	{
-		g_engine->Close();
-		MessageBox(g_hWnd, TEXT("Error while processing RegisterClassEx!"),
+		g_engine->close();
+		MessageBox(gHwnd, TEXT("Error while processing RegisterClassEx!"),
 		           TEXT("Error"), MB_ICONERROR);
 		return -1;
 	}
@@ -83,33 +80,31 @@ int WINAPI _tWinMain(HINSTANCE hThisInst, HINSTANCE/*hPrevInst*/,
 	}
 
 	AdjustWindowRectEx(&windowRect, dwStyle, FALSE, dwExStyle);
-	g_hWnd = CreateWindowEx(0, szTitle, szTitle,
-	                        dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-	                        0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
-	                        HWND_DESKTOP, NULL, g_hIstance, NULL);
+	gHwnd = CreateWindowEx(0, szTitle, szTitle,
+	                       dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+	                       0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
+	                       HWND_DESKTOP, NULL, gInstance, NULL);
 
-	if (!g_hWnd)
+	if (!gHwnd)
 	{
-		g_engine->Close();
-		MessageBox(g_hWnd, TEXT("Error while processing CreateWindowEx!"),
+		g_engine->close();
+		MessageBox(gHwnd, TEXT("Error while processing CreateWindowEx!"),
 		           TEXT("Error"), MB_ICONERROR);
 		return -1;
 	}
 
-	ShowWindow(g_hWnd, g_nCmdShow);
-	UpdateWindow(g_hWnd);
-	g_engine->setWindowHandle(g_hWnd);
+	ShowWindow(gHwnd, gCmdShow);
+	UpdateWindow(gHwnd);
+	g_engine->setWindowHandle(gHwnd);
 
-	if (!g_engine->Init(g_engine->getScreenWidth(), g_engine->getScreenHeight(),
+	if (!g_engine->init(g_engine->getScreenWidth(), g_engine->getScreenHeight(),
 	                    g_engine->getColorDepth(), g_engine->getFullScreen()))
 	{
-		g_engine->Close();
-		MessageBox(g_hWnd, TEXT("Error while processing g_engine::Init!"),
+		g_engine->close();
+		MessageBox(gHwnd, TEXT("Error while processing g_engine::Init!"),
 		           TEXT("Error"), MB_ICONERROR);
 		return -1;
 	}
-
-	gameover = false;
 
 	while (!gameover)
 	{
@@ -119,7 +114,7 @@ int WINAPI _tWinMain(HINSTANCE hThisInst, HINSTANCE/*hPrevInst*/,
 			DispatchMessage(&msg);
 		}
 
-		g_engine->Update();
+		g_engine->update();
 	}
 
 	if (g_engine->getFullScreen())
@@ -127,22 +122,22 @@ int WINAPI _tWinMain(HINSTANCE hThisInst, HINSTANCE/*hPrevInst*/,
 		ShowCursor(TRUE);
 	}
 
-	g_engine->Close();
+	g_engine->close();
 	delete g_engine;
 	g_engine = NULL;
 	return 0;
 }
 
-LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT WINAPI WinProc(HWND aHwnd, UINT aMsg, WPARAM aWparam, LPARAM aLparam)
 {
-	switch (msg)
+	switch (aMsg)
 	{
 		case WM_QUIT:
 		case WM_CLOSE:
 		case WM_DESTROY:
-			g_engine->Shutdown();
+			g_engine->shutdown();
 			break;
 	}
 
-	return DefWindowProc(hWnd, msg, wParam, lParam);
+	return DefWindowProc(aHwnd, aMsg, aWparam, aLparam);
 }

@@ -8,16 +8,16 @@ namespace Advanced2D
 class Timer
 {
 private:
-	DWORD timer_start;
-	DWORD stopwatch_start;
+	DWORD mStart;
+	DWORD mStopWatchStart;
 public:
-	Timer(void);
-	~Timer(void);
-	DWORD getTimer();
+	Timer();
+	~Timer();
+	static DWORD getTimer();
 	DWORD getStartTimeMillis();
-	void sleep(int ms);
+	void sleep(int aMillis);
 	void reset();
-	bool stopwatch(int ms);
+	bool stopwatch(int aMillis);
 };
 }
 
