@@ -5,36 +5,36 @@
 class Timer : public testing::Test
 {
 public:
-	Advanced2D::Timer* timer;
+	Advanced2D::Timer* mTimer;
 protected:
-	Timer() : timer(NULL)
+	Timer() : mTimer(NULL)
 	{
 	}
 	virtual void SetUp()
 	{
-		timer = new Advanced2D::Timer();
+		mTimer = new Advanced2D::Timer();
 	}
 	virtual void TearDown()
 	{
-		delete timer;
+		delete mTimer;
 	}
 	virtual ~Timer()
 	{
-		timer = NULL;
+		mTimer = NULL;
 	}
 };
 
 TEST_F(Timer, getStartTimeMillis_sleep)
 {
-	ASSERT_GT(50, timer->getStartTimeMillis());
-	timer->sleep(550);
-	ASSERT_LT(500, timer->getStartTimeMillis());
+	ASSERT_GT(50u, mTimer->getStartTimeMillis());
+	mTimer->sleep(550);
+	ASSERT_LT(500u, mTimer->getStartTimeMillis());
 }
 
 TEST_F(Timer, reset_stopwatch)
 {
-	ASSERT_FALSE(timer->stopwatch(50));
-	timer->sleep(55);
-	ASSERT_TRUE(timer->stopwatch(50));
-	ASSERT_FALSE(timer->stopwatch(50));
+	ASSERT_FALSE(mTimer->stopwatch(50));
+	mTimer->sleep(55);
+	ASSERT_TRUE(mTimer->stopwatch(50));
+	ASSERT_FALSE(mTimer->stopwatch(50));
 }

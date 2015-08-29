@@ -124,6 +124,27 @@ if(DEFINED GTEST_LIBRARY)
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
     endif(NOT MSVC)
 
+    #TestAdvanced2d
+    set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Advanced2d.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Winmain.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Winmain.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Tests/TestAdvanced2d.cpp
+                  ${GTEST_LIBRARY}/src/gtest-all.cc
+                  ${GTEST_LIBRARY}/src/gtest_main.cc)
+    add_executable(TestAdvanced2d_ANSI ${SRC_FILES})
+    target_include_directories(TestAdvanced2d_ANSI PRIVATE ${chapterPath}/Engine/inc ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+    target_link_libraries(TestAdvanced2d_ANSI ${REQUIRED_LIBRARIES} ${GCOV_LIB})
+    if(MSVC)
+      add_executable(TestAdvanced2d_Unicode ${SRC_FILES})
+      set_target_properties(TestAdvanced2d_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
+      target_include_directories(TestAdvanced2d_Unicode PRIVATE ${chapterPath}/Engine/inc ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+      target_link_libraries(TestAdvanced2d_Unicode ${REQUIRED_LIBRARIES} ${GCOV_LIB})
+    endif(MSVC)
+    #TestAdvanced2d
+
     #TestTimer
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp

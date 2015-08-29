@@ -3,12 +3,13 @@
 
 bool game_preload()
 {
-	_TCHAR ver[64 * sizeof(_TCHAR)];
-	g_engine->showMessage(g_engine->getVersionText(ver), TEXT("TEXT ENGINE"));
+	Advanced2D::Engine::setAppTitle(TEXT("Ch1_HelloAdvanced2D"));
+	g_engine->showMessage(Advanced2D::Engine::getVersionText().c_str(),
+	                      TEXT("TEXT ENGINE"));
 	return true;
 }
 
-bool game_init(HWND)
+bool game_init(Advanced2D::Engine*)
 {
 	return true;
 }

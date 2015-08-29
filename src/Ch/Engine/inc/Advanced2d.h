@@ -2,6 +2,7 @@
 #define __ADVANCED2D_H_
 
 #include "Timer.h"
+#include <string>
 #include <tchar.h>
 #include <d3dx9.h>
 
@@ -9,95 +10,112 @@
 #define VERSION_MINOR 0
 #define REVISION 0
 
-extern bool gameover;
-extern bool game_preload();
-extern bool game_init(HWND);
-extern void game_update();
-extern void game_end();
-extern void game_render3d();
-
 namespace Advanced2D
 {
 class Engine
 {
 private:
-	unsigned short mVersionMajor, mVersionMinor, mRevision;
-	HWND mWindowHandle;
+	static unsigned short sVersionMajor;
+	static unsigned short sVersionMinor;
+	static unsigned short sRevision;
+
+	static int sWidth;
+	static int sHeight;
+	static int sColorDepth;
+	static bool sFullScreen;
+
+#if UNICODE
+	static std::wstring sTitle;
+#else
+	static std::string sTitle;
+#endif
+
+	const HWND mWindowHandle;
+
 	LPDIRECT3D9 mDirect3d;
 	LPDIRECT3DDEVICE9 mDirect3dDevice;
-	LPDIRECT3DSURFACE9 mBackbuffer;
+	LPDIRECT3DSURFACE9 mBackBuffer;
 	LPD3DXSPRITE mSpriteHandler;
-	_TCHAR mTitle[MAX_PATH];
-	bool mFullScreen;
-	int mWidth;
-	int mHeight;
-	int mColorDepth;
-	bool mPause;
 	D3DCOLOR mAmbientColor;
+
+	bool mPause;
 	bool mMaximizeProcessor;
+
 	Timer mCoreTimer;
 	long mFrameCountCore;
 	long mFrameRateCore;
+
 	Timer mRealTimer;
 	long mFrameCountReal;
 	long mFrameRateReal;
 
-public:
 	Engine();
-	virtual ~Engine();
-	int init(int aWidth, int aHeight, int aColorDepth, bool aFullScreen);
-	void close();
-	void update();
-	void showMessage(const _TCHAR* aMessage,
-	                 const _TCHAR* aTitle = TEXT("ADVANCED 2D"));
-	void showFatalMessage(const _TCHAR* aMessage,
-	                      const _TCHAR* aTitle = TEXT("FATAL ERROR"));
-	void shutdown();
-	void clearScene(D3DCOLOR aColor);
-	void setDefaultMaterial();
-	void setAmbient(D3DCOLOR aColor);
-	int renderStart();
-	int renderStop();
+	Engine(const Engine& aRhs);
+	Engine& operator=(const Engine& aRhs);
+public:
+	static unsigned short getVersionMajor();
+	static unsigned short getVersionMinor();
+	static unsigned short getRevision();
+#if UNICODE
+	static std::wstring getVersionText();
+#else
+	static std::string getVersionText();
+#endif
+	static int getScreenWidth();
+	static void setScreenWidth(int aWidth);
+	static int getScreenHeight();
+	static void setScreenHeight(int aHeight);
+	static int getColorDepth();
+	static void setColorDepth(int aColorDepth);
+	static bool getFullScreen();
+	static void setFullScreen(bool aFullScreen);
+	static void close();
 
-	bool isPaused();
-	void setPauser(bool aPause);
+	static const _TCHAR* getAppTitle();
+	static void setAppTitle(const _TCHAR* aTitle);
 
-	LPDIRECT3DDEVICE9 getDevice();
+	static void shutdown();
 
-	LPDIRECT3DSURFACE9 getBackBuffer();
+	static void showMessage(const _TCHAR* aMessage,
+	                        const _TCHAR* aTitle = TEXT("ADVANCED 2D"));
+	static void showFatalMessage(const _TCHAR* aMessage,
+	                             const _TCHAR* aTitle = TEXT("FATAL ERROR"));
 
-	LPD3DXSPRITE getSpriteHandler();
-
-	void setWindowHandle(HWND aHwnd);
+	Engine(HWND aWindowHandle);
 	HWND getWindowHandle();
 
-	_TCHAR* getAppTitle(_TCHAR* aTitle = NULL);
-	void setAppTitle(const _TCHAR* aTitle);
+	LPDIRECT3DDEVICE9 getDevice();
+	LPDIRECT3DSURFACE9 getBackBuffer();
+	LPD3DXSPRITE getSpriteHandler();
 
-	unsigned short getVersionMajor();
-	unsigned short getVersionMinor();
-	unsigned short getRevision();
-	_TCHAR* getVersionText(_TCHAR* aVersion);
+	bool isPaused();
+	void setPaused(bool aPause);
+
+	void clearScene(D3DCOLOR aColor);
+	void setDefaultMaterial();
+	void setAmbient(D3DCOLOR aAmbientColor);
+
+	int renderStart();
+	int renderStop();
 
 	long getFrameRate_core();
 	long getFrameRate_real();
 
-	int getScreenWidth();
-	void setScreenWidth(int aWidth);
-	int getScreenHeight();
-	void setScreenHeight(int aHeight);
-
-	int getColorDepth();
-	void setColorDepth(int aColorDepth);
-
-	bool getFullScreen();
-	void setFullScreen(bool aFullScreen);
-
 	bool getMaximizeProcessor();
 	void setMaximizeProcessor(bool aMaximizeProcessor);
 
+	void update();
+
+	virtual ~Engine();
 };
 }
+
+extern bool gameover;
+extern bool game_preload();
+extern bool game_init(Advanced2D::Engine*);
+extern void game_update();
+extern void game_end();
+extern void game_render3d();
 
 extern Advanced2D::Engine* g_engine;
 

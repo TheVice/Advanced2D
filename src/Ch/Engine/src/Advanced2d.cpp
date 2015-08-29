@@ -1,58 +1,119 @@
 
 #include "Advanced2D.h"
-#include <stdio.h>
+#include <sstream>
 
 namespace Advanced2D
 {
 
-Engine::Engine() :
-	mVersionMajor(VERSION_MAJOR),
-	mVersionMinor(VERSION_MINOR),
-	mRevision(REVISION),
-	mWindowHandle(HWND_DESKTOP),
-	mDirect3d(NULL),
-	mDirect3dDevice(NULL),
-	mBackbuffer(NULL),
-	mSpriteHandler(NULL),
-	mFullScreen(false),
-	mWidth(640),
-	mHeight(480),
-	mColorDepth(32),
-	mPause(false),
-	mAmbientColor(D3DCOLOR_RGBA(255, 255, 255, 0)),
-	mMaximizeProcessor(false),
-	mFrameCountCore(0),
-	mFrameRateCore(0),
-	mFrameCountReal(0),
-	mFrameRateReal(0)
-{
-	setAppTitle(TEXT("Advanced2D"));
-}
+unsigned short Engine::sVersionMajor = VERSION_MAJOR;
+unsigned short Engine::sVersionMinor = VERSION_MINOR;
+unsigned short Engine::sRevision = REVISION;
+int Engine::sWidth = 640;
+int Engine::sHeight = 480;
+int Engine::sColorDepth = 32;
+bool Engine::sFullScreen = false;
 
-Engine::~Engine()
-{
-	if (mDirect3dDevice)
-	{
-		mDirect3dDevice->Release();
-	}
-
-	if (mDirect3d)
-	{
-		mDirect3d->Release();
-	}
-}
-
-_TCHAR* Engine::getVersionText(_TCHAR* aVersion)
-{
-#if _MSC_VER > 1310
-	_stprintf_s(aVersion, 64 * sizeof(_TCHAR), TEXT("Advanced2D Engine v %i.%i.%i"),
-	            mVersionMajor,
-	            mVersionMinor, mRevision);
+#if UNICODE
+std::wstring Engine::sTitle;
 #else
-	_stprintf(aVersion, TEXT("Advanced2D Engine v %i.%i.%i"), mVersionMajor,
-	          mVersionMinor, mRevision);
+std::string Engine::sTitle;
 #endif
-	return aVersion;
+
+unsigned short Engine::getVersionMajor()
+{
+	return sVersionMajor;
+}
+
+unsigned short Engine::getVersionMinor()
+{
+	return sVersionMinor;
+}
+
+unsigned short Engine::getRevision()
+{
+	return sRevision;
+}
+
+#if UNICODE
+std::wstring Engine::getVersionText()
+{
+	std::wstringstream v;
+	v << L"Advanced2D Engine v " << sVersionMajor << L"." << sVersionMinor << L"."
+	  << sRevision;
+	return v.str();
+}
+#else
+std::string Engine::getVersionText()
+{
+	std::ostringstream v;
+	v << "Advanced2D Engine v " << sVersionMajor << "." << sVersionMinor << "." <<
+	  sRevision;
+	return v.str();
+}
+#endif
+
+int Engine::getScreenWidth()
+{
+	return sWidth;
+}
+
+void Engine::setScreenWidth(int aWidth)
+{
+	sWidth = aWidth;
+}
+
+int Engine::getScreenHeight()
+{
+	return sHeight;
+}
+
+void Engine::setScreenHeight(int aHeight)
+{
+	sHeight = aHeight;
+}
+
+int Engine::getColorDepth()
+{
+	return sColorDepth;
+}
+
+void Engine::setColorDepth(int aColorDepth)
+{
+	sColorDepth = aColorDepth;
+}
+
+bool Engine::getFullScreen()
+{
+	return sFullScreen;
+}
+
+void Engine::setFullScreen(bool aFullScreen)
+{
+	sFullScreen = aFullScreen;
+}
+
+void Engine::close()
+{
+	game_end();
+}
+
+const _TCHAR* Engine::getAppTitle()
+{
+	return sTitle.c_str();
+}
+
+void Engine::setAppTitle(const _TCHAR* aTitle)
+{
+#if UNICODE
+	sTitle = std::wstring(aTitle);
+#else
+	sTitle = std::string(aTitle);
+#endif
+}
+
+void Engine::shutdown()
+{
+	gameover = true;
 }
 
 void Engine::showMessage(const _TCHAR* aMessage, const _TCHAR* aTitle)
@@ -66,100 +127,168 @@ void Engine::showFatalMessage(const _TCHAR* aMessage, const _TCHAR* aTitle)
 	shutdown();
 }
 
-int Engine::init(int aWidth, int aHeight, int/*aColorDepth*/, bool aFullScreen)
+Engine::Engine(HWND aWindowHandle) :
+	mWindowHandle(aWindowHandle),
+	mDirect3d(NULL),
+	mDirect3dDevice(NULL),
+	mBackBuffer(NULL),
+	mSpriteHandler(NULL),
+	mAmbientColor(D3DCOLOR_RGBA(255, 255, 255, 0)),
+	mPause(false),
+	mMaximizeProcessor(false),
+	mCoreTimer(),
+	mFrameCountCore(0),
+	mFrameRateCore(0),
+	mRealTimer(),
+	mFrameCountReal(0),
+	mFrameRateReal(0)
 {
 	mDirect3d = Direct3DCreate9(D3D_SDK_VERSION);
 
 	if (!mDirect3d)
 	{
-		return 0;
+		throw new std::exception("Unable to fill mDirect3d");
 	}
 
-	D3DDISPLAYMODE dm;
-	memset(&dm, 0, sizeof(D3DDISPLAYMODE));
-	mDirect3d->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &dm);
-	D3DPRESENT_PARAMETERS d3dpp;
-	memset(&d3dpp, 0, sizeof(D3DPRESENT_PARAMETERS));
-	d3dpp.Windowed = (!aFullScreen);
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.EnableAutoDepthStencil = TRUE;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-	d3dpp.BackBufferFormat = dm.Format;
-	d3dpp.BackBufferCount = 1;
-	d3dpp.BackBufferWidth = aWidth;
-	d3dpp.BackBufferHeight = aHeight;
-	d3dpp.hDeviceWindow = mWindowHandle;
-	mDirect3d->CreateDevice(
-	    D3DADAPTER_DEFAULT,
-	    D3DDEVTYPE_HAL,
-	    mWindowHandle,
-	    D3DCREATE_HARDWARE_VERTEXPROCESSING,
-	    &d3dpp,
-	    &mDirect3dDevice);
+	D3DDISPLAYMODE displayMode;
+	memset(&displayMode, 0, sizeof(D3DDISPLAYMODE));
 
-	if (!mDirect3dDevice)
+	if (FAILED(mDirect3d->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &displayMode)))
 	{
-		return 0;
+		throw new std::exception("Unable to call GetAdapterDisplayMode");
+	}
+
+	D3DPRESENT_PARAMETERS presentationParameters;
+	memset(&presentationParameters, 0, sizeof(D3DPRESENT_PARAMETERS));
+	presentationParameters.Windowed = (!Engine::getFullScreen());
+	presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	presentationParameters.EnableAutoDepthStencil = TRUE;
+	presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;
+	presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	presentationParameters.BackBufferFormat = displayMode.Format;
+	presentationParameters.BackBufferCount = 1;
+	presentationParameters.BackBufferWidth = Engine::getScreenWidth();
+	presentationParameters.BackBufferHeight = Engine::getScreenHeight();
+	presentationParameters.hDeviceWindow = mWindowHandle;
+
+	if (FAILED(mDirect3d->CreateDevice(
+	               D3DADAPTER_DEFAULT,
+	               D3DDEVTYPE_HAL,
+	               mWindowHandle,
+	               D3DCREATE_HARDWARE_VERTEXPROCESSING,
+	               &presentationParameters,
+	               &mDirect3dDevice)))
+	{
+		throw new std::exception("Unable to call CreateDevice");
 	}
 
 	clearScene(D3DCOLOR_XRGB(0, 0, 0));
+
 	//create pointer to BackBuffer
-	mDirect3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO,
-	                               &mBackbuffer);
+	if (FAILED(mDirect3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO,
+	           &mBackBuffer)))
+	{
+		throw new std::exception("Unable to call GetBackBuffer");
+	}
+
 	//use ambient lighting and z-buffering
-	mDirect3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	mDirect3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-	mDirect3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE)))
+	{
+		throw new std::exception("Unable to call SetRenderState");
+	}
+
+	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID)))
+	{
+		throw new std::exception("Unable to call SetRenderState");
+	}
+
+	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE)))
+	{
+		throw new std::exception("Unable to call SetRenderState");
+	}
+
 	setAmbient(mAmbientColor);
 
 	//initialize 2D render
 	if (D3D_OK != D3DXCreateSprite(mDirect3dDevice, &mSpriteHandler))
 	{
-		return 0;
+		throw new std::exception("Unable to call D3DXCreateSprite");
 	}
 
-	if (!game_init(getWindowHandle()))
+	if (!game_init(this))
 	{
-		return 0;
+		throw new std::exception("Unable to call game_init");
 	}
 
 	setDefaultMaterial();
-	return 1;
 }
 
-void Engine::setDefaultMaterial()
+HWND Engine::getWindowHandle()
 {
-	D3DMATERIAL9 mat;
-	memset(&mat, 0, sizeof(D3DMATERIAL9));
-	mat.Diffuse.r = mat.Ambient.r = 1.0f;
-	mat.Diffuse.g = mat.Ambient.g = 1.0f;
-	mat.Diffuse.b = mat.Ambient.b = 1.0f;
-	mat.Diffuse.a = mat.Ambient.a = 1.0f;
-	mDirect3dDevice->SetMaterial(&mat);
+	return mWindowHandle;
+}
+
+LPDIRECT3DDEVICE9 Engine::getDevice()
+{
+	return mDirect3dDevice;
+}
+
+LPDIRECT3DSURFACE9 Engine::getBackBuffer()
+{
+	return mBackBuffer;
+}
+
+LPD3DXSPRITE Engine::getSpriteHandler()
+{
+	return mSpriteHandler;
+}
+
+bool Engine::isPaused()
+{
+	return mPause;
+}
+
+void Engine::setPaused(bool aPause)
+{
+	mPause = aPause;
 }
 
 void Engine::clearScene(D3DCOLOR aColor)
 {
-	mDirect3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
-	                       aColor,
-	                       1.0f,
-	                       0);
+	if (FAILED(mDirect3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
+	                                  aColor, 1.0f, 0)))
+	{
+		throw new std::exception("Unable to call Clear");
+	}
 }
 
-void Engine::setAmbient(D3DCOLOR aColor)
+void Engine::setDefaultMaterial()
 {
-	mAmbientColor = aColor;
-	mDirect3dDevice->SetRenderState(D3DRS_AMBIENT, mAmbientColor);
+	D3DMATERIAL9 material;
+	memset(&material, 0, sizeof(D3DMATERIAL9));
+	material.Diffuse.r = material.Ambient.r = 1.0f;
+	material.Diffuse.g = material.Ambient.g = 1.0f;
+	material.Diffuse.b = material.Ambient.b = 1.0f;
+	material.Diffuse.a = material.Ambient.a = 1.0f;
+
+	if (FAILED(mDirect3dDevice->SetMaterial(&material)))
+	{
+		throw new std::exception("Unable to call SetMaterial");
+	}
+}
+
+void Engine::setAmbient(D3DCOLOR aAmbientColor)
+{
+	mAmbientColor = aAmbientColor;
+
+	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_AMBIENT, mAmbientColor)))
+	{
+		throw new std::exception("Unable to call SetRenderState");
+	}
 }
 
 int Engine::renderStart()
 {
-	if (!mDirect3dDevice)
-	{
-		return 0;
-	}
-
 	if (D3D_OK != mDirect3dDevice->BeginScene())
 	{
 		return 0;
@@ -170,11 +299,6 @@ int Engine::renderStart()
 
 int Engine::renderStop()
 {
-	if (!mDirect3dDevice)
-	{
-		return 0;
-	}
-
 	if (D3D_OK != mDirect3dDevice->EndScene())
 	{
 		return 0;
@@ -188,9 +312,24 @@ int Engine::renderStop()
 	return 1;
 }
 
-void Engine::shutdown()
+long Engine::getFrameRate_core()
 {
-	gameover = true;
+	return mFrameCountCore;
+}
+
+long Engine::getFrameRate_real()
+{
+	return mFrameCountReal;
+}
+
+bool Engine::getMaximizeProcessor()
+{
+	return mMaximizeProcessor;
+}
+
+void Engine::setMaximizeProcessor(bool aMaximizeProcessor)
+{
+	mMaximizeProcessor = aMaximizeProcessor;
 }
 
 void Engine::update()
@@ -234,144 +373,17 @@ void Engine::update()
 	}
 }
 
-void Engine::close()
+Engine::~Engine()
 {
-	game_end();
-}
-
-bool Engine::isPaused()
-{
-	return mPause;
-}
-
-void Engine::setPauser(bool aPause)
-{
-	mPause = aPause;
-}
-
-LPDIRECT3DDEVICE9 Engine::getDevice()
-{
-	return mDirect3dDevice;
-}
-
-LPDIRECT3DSURFACE9 Engine::getBackBuffer()
-{
-	return mBackbuffer;
-}
-
-LPD3DXSPRITE Engine::getSpriteHandler()
-{
-	return mSpriteHandler;
-}
-
-void Engine::setWindowHandle(HWND aHwnd)
-{
-	mWindowHandle = aHwnd;
-}
-
-HWND Engine::getWindowHandle()
-{
-	return mWindowHandle;
-}
-
-_TCHAR* Engine::getAppTitle(_TCHAR* aTitle)
-{
-	if (!aTitle)
+	if (mDirect3dDevice)
 	{
-		return mTitle;
+		mDirect3dDevice->Release();
 	}
 
-#if _MSC_VER > 1310
-	_tcscpy_s(aTitle, 64, mTitle);
-#else
-	_tcscpy(aTitle, mTitle);
-#endif
-	return aTitle;
-}
-
-void Engine::setAppTitle(const _TCHAR* aTitle)
-{
-#if _MSC_VER > 1310
-	_tcsncpy_s(mTitle, 64, aTitle,
-	           sizeof(mTitle) / sizeof(*mTitle));
-#else
-	_tcsncpy(mTitle, aTitle, sizeof(mTitle) / sizeof(*mTitle));
-#endif
-}
-
-unsigned short Engine::getVersionMajor()
-{
-	return mVersionMajor;
-}
-
-unsigned short Engine::getVersionMinor()
-{
-	return mVersionMinor;
-}
-
-unsigned short Engine::getRevision()
-{
-	return mRevision;
-}
-
-long Engine::getFrameRate_core()
-{
-	return mFrameCountCore;
-}
-
-long Engine::getFrameRate_real()
-{
-	return mFrameCountReal;
-}
-
-int Engine::getScreenWidth()
-{
-	return mWidth;
-}
-
-void Engine::setScreenWidth(int aWidth)
-{
-	mWidth = aWidth;
-}
-
-int Engine::getScreenHeight()
-{
-	return mHeight;
-}
-
-void Engine::setScreenHeight(int aHeight)
-{
-	mHeight = aHeight;
-}
-
-int Engine::getColorDepth()
-{
-	return mColorDepth;
-}
-
-void Engine::setColorDepth(int aColorDepth)
-{
-	mColorDepth = aColorDepth;
-}
-
-bool Engine::getFullScreen()
-{
-	return mFullScreen;
-}
-
-void Engine::setFullScreen(bool aFullScreen)
-{
-	mFullScreen = aFullScreen;
-}
-
-bool Engine::getMaximizeProcessor()
-{
-	return mMaximizeProcessor;
-}
-
-void Engine::setMaximizeProcessor(bool aMaximizeProcessor)
-{
-	mMaximizeProcessor = aMaximizeProcessor;
+	if (mDirect3d)
+	{
+		mDirect3d->Release();
+	}
 }
 
 }

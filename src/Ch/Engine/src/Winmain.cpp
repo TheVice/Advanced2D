@@ -4,37 +4,24 @@
 #include <time.h>
 #include <stdio.h>
 
-static HINSTANCE gInstance;
-static HWND gHwnd = NULL;
-static int gCmdShow = 0;
-Advanced2D::Engine* g_engine;
-
+Advanced2D::Engine* g_engine = NULL;
 bool gameover = false;
 
 int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
                      int aWinMode)
 {
-	MSG msg;
+	(void)aPrevInst;
+	(void)aCmdArgs;
 	srand((unsigned int)time(NULL));
-	gInstance = aInstance;
-	gCmdShow = aWinMode;
-	DWORD dwStyle, dwExStyle;
-	RECT windowRect;
-	g_engine = new Advanced2D::Engine();
 
 	if (!game_preload())
 	{
-		g_engine->close();
-		MessageBox(gHwnd, TEXT("Error in game preload!"), TEXT("Error"), MB_ICONERROR);
+		Advanced2D::Engine::close();
+		MessageBox(HWND_DESKTOP, TEXT("Error in game preload!"), TEXT("Error"),
+		           MB_ICONERROR);
 		return -1;
 	}
 
-	TCHAR szTitle[MAX_PATH];
-	g_engine->getAppTitle(szTitle);
-	windowRect.left = 0L;
-	windowRect.right = static_cast<long>(g_engine->getScreenWidth());
-	windowRect.top = 0L;
-	windowRect.bottom = static_cast<long>(g_engine->getScreenHeight());
 	WNDCLASSEX wc;
 	memset(&wc, 0, sizeof(WNDCLASSEX));
 	wc.cbSize = sizeof(WNDCLASSEX);
@@ -44,29 +31,31 @@ int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
 	wc.hInstance = aInstance;
 	wc.hIcon = NULL;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = NULL;//(HBRUSH)(COLOR_WINDOW + 1);
+	wc.hbrBackground = NULL;
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = szTitle;
+	wc.lpszClassName = TEXT("Advanced2D");
 	wc.hIconSm = NULL;
 
 	if (!RegisterClassEx(&wc))
 	{
-		g_engine->close();
-		MessageBox(gHwnd, TEXT("Error while processing RegisterClassEx!"),
+		Advanced2D::Engine::close();
+		MessageBox(HWND_DESKTOP, TEXT("Error while processing RegisterClassEx!"),
 		           TEXT("Error"), MB_ICONERROR);
 		return -1;
 	}
 
-	DEVMODE dm;
-	memset(&dm, 0, sizeof(DEVMODE));
-	dm.dmSize = sizeof(DEVMODE);
-	dm.dmPelsWidth = g_engine->getScreenWidth();
-	dm.dmPelsHeight = g_engine->getScreenHeight();
-	dm.dmBitsPerPel = g_engine->getColorDepth();
-	dm.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+	DEVMODE deviceMode;
+	memset(&deviceMode, 0, sizeof(DEVMODE));
+	deviceMode.dmSize = sizeof(DEVMODE);
+	deviceMode.dmPelsWidth = Advanced2D::Engine::getScreenWidth();
+	deviceMode.dmPelsHeight = Advanced2D::Engine::getScreenHeight();
+	deviceMode.dmBitsPerPel = Advanced2D::Engine::getColorDepth();
+	deviceMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+	DWORD dwStyle = 0;
+	DWORD dwExStyle = 0;
 
-	if (g_engine->getFullScreen() &&
-	    DISP_CHANGE_SUCCESSFUL == ChangeDisplaySettings(&dm, CDS_FULLSCREEN))
+	if (Advanced2D::Engine::getFullScreen() &&
+	    DISP_CHANGE_SUCCESSFUL == ChangeDisplaySettings(&deviceMode, CDS_FULLSCREEN))
 	{
 		dwStyle = WS_POPUP;
 		dwExStyle = WS_EX_APPWINDOW;
@@ -76,38 +65,49 @@ int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
 	{
 		dwStyle = WS_OVERLAPPEDWINDOW;
 		dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-		g_engine->setFullScreen(false);
+		Advanced2D::Engine::setFullScreen(false);
 	}
 
+	RECT windowRect;
+	windowRect.left = 0L;
+	windowRect.right = static_cast<long>(Advanced2D::Engine::getScreenWidth());
+	windowRect.top = 0L;
+	windowRect.bottom = static_cast<long>(Advanced2D::Engine::getScreenHeight());
 	AdjustWindowRectEx(&windowRect, dwStyle, FALSE, dwExStyle);
-	gHwnd = CreateWindowEx(0, szTitle, szTitle,
-	                       dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-	                       0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
-	                       HWND_DESKTOP, NULL, gInstance, NULL);
+	//
+	HWND hwnd = CreateWindowEx(0, wc.lpszClassName,
+	                           Advanced2D::Engine::getAppTitle(),
+	                           dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+	                           0, 0, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
+	                           HWND_DESKTOP, NULL, aInstance, NULL);
 
-	if (!gHwnd)
+	if (!hwnd)
 	{
-		g_engine->close();
-		MessageBox(gHwnd, TEXT("Error while processing CreateWindowEx!"),
+		Advanced2D::Engine::close();
+		MessageBox(HWND_DESKTOP, TEXT("Error while processing CreateWindowEx!"),
 		           TEXT("Error"), MB_ICONERROR);
 		return -1;
 	}
 
-	ShowWindow(gHwnd, gCmdShow);
-	UpdateWindow(gHwnd);
-	g_engine->setWindowHandle(gHwnd);
-
-	if (!g_engine->init(g_engine->getScreenWidth(), g_engine->getScreenHeight(),
-	                    g_engine->getColorDepth(), g_engine->getFullScreen()))
+	try
 	{
-		g_engine->close();
-		MessageBox(gHwnd, TEXT("Error while processing g_engine::Init!"),
+		g_engine = new Advanced2D::Engine(hwnd);
+	}
+	catch (const std::exception&)
+	{
+		Advanced2D::Engine::close();
+		MessageBox(HWND_DESKTOP, TEXT("Error while creating engine!"),
 		           TEXT("Error"), MB_ICONERROR);
 		return -1;
 	}
+
+	ShowWindow(hwnd, aWinMode);
+	UpdateWindow(hwnd);
 
 	while (!gameover)
 	{
+		MSG msg;
+
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
@@ -117,12 +117,12 @@ int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
 		g_engine->update();
 	}
 
-	if (g_engine->getFullScreen())
+	if (Advanced2D::Engine::getFullScreen())
 	{
 		ShowCursor(TRUE);
 	}
 
-	g_engine->close();
+	Advanced2D::Engine::close();
 	delete g_engine;
 	g_engine = NULL;
 	return 0;
