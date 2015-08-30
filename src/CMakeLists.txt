@@ -81,16 +81,11 @@ if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${Chapter})
     endif(NOT IS_DIRECTORY ${chapterPath}/Samples/${Sample})
   endforeach(Sample ${Samples})
 
-  set(outLocation)
-  get_property(outLocation TARGET ${libraryName}_ANSI PROPERTY LOCATION)
-  string(FIND ${outLocation} "/" pos REVERSE)
-  string(SUBSTRING ${outLocation} 0 ${pos} outLocation)
-
   file(GLOB resourceFiles RELATIVE ${chapterPath}/ ${chapterPath}/*)
   foreach(resourceFile ${resourceFiles})
     if(NOT IS_DIRECTORY ${chapterPath}/${resourceFile})
 
-      set(target ${outLocation}/${resourceFile})
+      set(target ${CMAKE_BINARY_DIR}/${resourceFile})
       set(source ${chapterPath}/${resourceFile})
       add_custom_command(
         TARGET ${libraryName}_ANSI

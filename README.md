@@ -29,4 +29,4 @@ Addition information can be found at [Game Development Forum » Book Support Are
 * Version 2005/2008 have global directory setting so it also possible to set that value via IDE
 
 ###Building by other versions of Visual Studio
-* If ```msvc.cmd``` script do not determine version of Visual Studio, for example Microsoft Visual C++ Toolkit 2003, ```cmake``` do not apply - instead ```cl``` try to build project directly
+* If ```msvc.cmd``` script do not determine version of Visual Studio, for example you have Microsoft Visual C++ Toolkit 2003, ```cmake``` do not apply - instead ```cl``` try to build project directly

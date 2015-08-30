@@ -135,7 +135,7 @@ LRESULT WINAPI WinProc(HWND aHwnd, UINT aMsg, WPARAM aWparam, LPARAM aLparam)
 		case WM_QUIT:
 		case WM_CLOSE:
 		case WM_DESTROY:
-			g_engine->shutdown();
+			Advanced2D::Engine::shutdown();
 			break;
 	}
 
