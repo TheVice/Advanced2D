@@ -92,6 +92,7 @@ public:
 	void setPaused(bool aPause);
 
 	void clearScene(D3DCOLOR aColor);
+	void setIdentity();
 	void setDefaultMaterial();
 	void setAmbient(D3DCOLOR aAmbientColor);
 
@@ -112,7 +113,7 @@ public:
 
 extern bool gameover;
 extern bool game_preload();
-extern bool game_init(Advanced2D::Engine*);
+extern bool game_init();
 extern void game_update();
 extern void game_end();
 extern void game_render3d();

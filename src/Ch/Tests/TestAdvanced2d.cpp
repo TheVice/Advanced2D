@@ -7,12 +7,16 @@ bool game_preload()
 	return true;
 }
 
-bool game_init(Advanced2D::Engine*)
+bool game_init()
 {
 	return true;
 }
 
 void game_update()
+{
+}
+
+void game_render3d()
 {
 }
 
@@ -234,6 +238,11 @@ TEST_F(TestAdvanced2D, setPaused)
 TEST_F(TestAdvanced2D, clearScene)
 {
 	mEngine->clearScene(D3DCOLOR_XRGB(0, 0, 0));
+}
+
+TEST_F(TestAdvanced2D, setIdentity)
+{
+	mEngine->setIdentity();
 }
 
 TEST_F(TestAdvanced2D, setDefaultMaterial)

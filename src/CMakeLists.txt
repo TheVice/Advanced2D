@@ -28,6 +28,7 @@ if(NOT MSVC)
 endif(NOT MSVC)
 
 add_definitions("-DDIRECTINPUT_VERSION=0x0800")
+add_definitions("-D_USE_MATH_DEFINES")
 
 file(GLOB Chapters RELATIVE ${CMAKE_SOURCE_DIR} *)
 foreach(Chapter ${Chapters})

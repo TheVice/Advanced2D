@@ -101,6 +101,13 @@ int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
 		return -1;
 	}
 
+	if (!game_init())
+	{
+		Advanced2D::Engine::close();
+		MessageBox(HWND_DESKTOP, TEXT("Error while game_init!"),
+		           TEXT("Error"), MB_ICONERROR);
+	}
+
 	ShowWindow(hwnd, aWinMode);
 	UpdateWindow(hwnd);
 

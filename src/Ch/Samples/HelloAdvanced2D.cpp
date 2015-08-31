@@ -9,12 +9,16 @@ bool game_preload()
 	return true;
 }
 
-bool game_init(Advanced2D::Engine*)
+bool game_init()
 {
 	return true;
 }
 
 void game_update()
+{
+}
+
+void game_render3d()
 {
 }
 

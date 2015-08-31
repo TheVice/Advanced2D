@@ -215,11 +215,6 @@ Engine::Engine(HWND aWindowHandle) :
 		throw new std::exception("Unable to call D3DXCreateSprite");
 	}
 
-	if (!game_init(this))
-	{
-		throw new std::exception("Unable to call game_init");
-	}
-
 	setDefaultMaterial();
 }
 
@@ -259,6 +254,17 @@ void Engine::clearScene(D3DCOLOR aColor)
 	                                  aColor, 1.0f, 0)))
 	{
 		throw new std::exception("Unable to call Clear");
+	}
+}
+
+void Engine::setIdentity()
+{
+	D3DXMATRIX matrixWorld;
+	D3DXMatrixIdentity(&matrixWorld);
+
+	if (FAILED(mDirect3dDevice->SetTransform(D3DTS_WORLD, &matrixWorld)))
+	{
+		throw new std::exception("Unable to call SetTransform");
 	}
 }
 
@@ -368,6 +374,8 @@ void Engine::update()
 
 		//begin rendering
 		renderStart();
+		//let game do it's own 3D
+		game_render3d();
 		//done rendering
 		renderStop();
 	}
