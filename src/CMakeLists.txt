@@ -37,10 +37,11 @@ if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${Chapter})
   set(chapterPath ${CMAKE_SOURCE_DIR}/${Chapter})
 
   file(GLOB INC_FILES ${chapterPath}/Engine/inc/*.h)
+  file(GLOB INL_FILES ${chapterPath}/Engine/inc/*.inl)
   file(GLOB CPP_FILES ${chapterPath}/Engine/src/*.cpp)
 
   set(SRC_FILES)
-  list(APPEND SRC_FILES ${C_FILES})
+  list(APPEND SRC_FILES ${INL_FILES})
   list(APPEND SRC_FILES ${CPP_FILES})
 
   set(INC_FOLDER ${chapterPath}/Engine/inc)
@@ -102,11 +103,14 @@ if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${Chapter})
 endif(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${Chapter})
 endforeach(Chapter ${Chapters})
 
-if(DEFINED GTEST_LIBRARY)
+if(DEFINED GTEST_ROOT)
   include(CTest)
 
   if(BUILD_TESTING)
-
+    string(REPLACE "\\" "/" GTEST_ROOT ${GTEST_ROOT})
+    set(GTEST_LIBRARY ${GTEST_ROOT})
+    set(GTEST_INCLUDE_DIR ${GTEST_ROOT}/include)
+    set(GTEST_MAIN_LIBRARY gtest)
     enable_testing()
     find_package(GTest REQUIRED)
     include_directories(${GTEST_INCLUDE_DIRS})
@@ -119,6 +123,7 @@ if(DEFINED GTEST_LIBRARY)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
     endif(NOT MSVC)
+    list(APPEND REQUIRED_LIBRARIES ${GCOV_LIB})
 
     #TestAdvanced2d
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Advanced2d.h
@@ -131,13 +136,15 @@ if(DEFINED GTEST_LIBRARY)
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)
     add_executable(TestAdvanced2d_ANSI ${SRC_FILES})
-    target_include_directories(TestAdvanced2d_ANSI PRIVATE ${chapterPath}/Engine/inc ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
-    target_link_libraries(TestAdvanced2d_ANSI ${REQUIRED_LIBRARIES} ${GCOV_LIB})
+    target_include_directories(TestAdvanced2d_ANSI PRIVATE ${chapterPath}/Engine/inc)
+    target_include_directories(TestAdvanced2d_ANSI SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+    target_link_libraries(TestAdvanced2d_ANSI ${REQUIRED_LIBRARIES})
     if(MSVC)
       add_executable(TestAdvanced2d_Unicode ${SRC_FILES})
       set_target_properties(TestAdvanced2d_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
-      target_include_directories(TestAdvanced2d_Unicode PRIVATE ${chapterPath}/Engine/inc ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
-      target_link_libraries(TestAdvanced2d_Unicode ${REQUIRED_LIBRARIES} ${GCOV_LIB})
+      target_include_directories(TestAdvanced2d_Unicode PRIVATE ${chapterPath}/Engine/inc)
+      target_include_directories(TestAdvanced2d_Unicode SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+      target_link_libraries(TestAdvanced2d_Unicode ${REQUIRED_LIBRARIES})
     endif(MSVC)
     #TestAdvanced2d
 
@@ -148,31 +155,58 @@ if(DEFINED GTEST_LIBRARY)
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)
     add_executable(TestTimer_ANSI ${SRC_FILES})
-    target_include_directories(TestTimer_ANSI PRIVATE ${chapterPath}/Engine/inc ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
-    target_link_libraries(TestTimer_ANSI ${REQUIRED_LIBRARIES} ${GCOV_LIB})
+    target_include_directories(TestTimer_ANSI PRIVATE ${chapterPath}/Engine/inc)
+    target_include_directories(TestTimer_ANSI SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+    target_link_libraries(TestTimer_ANSI ${REQUIRED_LIBRARIES})
     if(MSVC)
       add_executable(TestTimer_Unicode ${SRC_FILES})
       set_target_properties(TestTimer_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
-      target_include_directories(TestTimer_Unicode PRIVATE ${chapterPath}/Engine/inc ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
-      target_link_libraries(TestTimer_Unicode ${REQUIRED_LIBRARIES} ${GCOV_LIB})
+      target_include_directories(TestTimer_Unicode PRIVATE ${chapterPath}/Engine/inc)
+      target_include_directories(TestTimer_Unicode SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+      target_link_libraries(TestTimer_Unicode ${REQUIRED_LIBRARIES})
     endif(MSVC)
     #TestTimer
 
+    #TestVector3
+    set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.inl
+                  ${CMAKE_SOURCE_DIR}/Ch/Tests/TestVector3.cpp
+                  ${GTEST_LIBRARY}/src/gtest-all.cc
+                  ${GTEST_LIBRARY}/src/gtest_main.cc)
+    add_executable(TestVector3 ${SRC_FILES})
+    target_include_directories(TestVector3 PRIVATE ${chapterPath}/Engine/inc)
+    target_include_directories(TestVector3 SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+    target_link_libraries(TestVector3 ${REQUIRED_LIBRARIES})
+    if(MSVC)
+      set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Tests/TestVector3.cpp
+                    ${GTEST_LIBRARY}/src/gtest-all.cc
+                    ${GTEST_LIBRARY}/src/gtest_main.cc)
+      add_executable(TestVector3_Unicode ${SRC_FILES})
+      set_target_properties(TestVector3_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
+      target_include_directories(TestVector3_Unicode PRIVATE ${chapterPath}/Engine/inc)
+      target_include_directories(TestVector3_Unicode SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+      target_link_libraries(TestVector3_Unicode ${libraryName}_Unicode ${REQUIRED_LIBRARIES})
+    endif(MSVC)
+    #TestVector3
+
+    add_test(TestAdvanced2d_ANSI TestAdvanced2d_ANSI)
     add_test(TestTimer_ANSI TestTimer_ANSI)
     if(MSVC)
+      add_test(TestAdvanced2d_Unicode TestAdvanced2d_Unicode)
       add_test(TestTimer_Unicode TestTimer_Unicode)
+      add_test(TestVector3_Unicode TestVector3_Unicode)
     endif(MSVC)
 
   endif(BUILD_TESTING)
-endif(DEFINED GTEST_LIBRARY)
+endif(DEFINED GTEST_ROOT)
 
-set(FLAGS)
 if(MSVC)
-set(FLAGS "${FLAGS} /W4 /GS")
-set(LINK_FLAGS "${LINK_FLAGS} /SafeSEH /DynamicBase /NXCompat")
+  set(FLAGS "${FLAGS} /W4 /GS")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DEFAULT_CMAKE_C_FLAGS} ${FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEFAULT_CMAKE_CXX_FLAGS} ${FLAGS}")
+  set(LINK_FLAGS "${LINK_FLAGS} /SafeSEH /DynamicBase /NXCompat")
 else()
-set(FLAGS "${FLAGS} -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unknown-pragmas")
+  set(FLAGS "${FLAGS} -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unknown-pragmas")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DEFAULT_CMAKE_C_FLAGS} ${FLAGS} -std=c11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEFAULT_CMAKE_CXX_FLAGS} ${FLAGS} -std=c++14")
 endif(MSVC)
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DEFAULT_CMAKE_C_FLAGS} ${FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEFAULT_CMAKE_CXX_FLAGS} ${FLAGS}")

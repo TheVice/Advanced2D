@@ -13,7 +13,7 @@ Addition information can be found at [Game Development Forum » Book Support Are
 * Microsoft DirectX SDK (Visual Studio 2012 and above have build in, but project require DXUT that provide only by Microsoft DirectX SDK)
 * Audio library [FMOD/FMOD Ex](http://www.fmod.org/download-previous-products/) version 3 or 4 for chapter 6 and above
 * Script library [Lua](http://lua-users.org/wiki/LuaBinaries) - for chapter 11 and lua based samples
-* [Google C++ Testing Framework](https://github.com/google/googletest) - only for tests. In this case you must manual call ```cmake``` and set to it path to ```gtest``` folder. For example if ```gtest``` version ```1.7``` at ```build``` sub directory - call from it will be next ```cmake ..\src -G "Visual Studio 9 2008" -DGTEST_LIBRARY="build\gtest-1.7.0"``` replace generator name with version of studio that you have
+* [Google C++ Testing Framework](https://github.com/google/googletest) - only for tests. In this case you must manual call ```cmake``` and set to it path to ```gtest``` folder. For example if ```gtest``` version ```1.7``` at ```build``` sub directory - call from it will be next ```cmake ..\src -G "Visual Studio 9 2008" -DGTEST_ROOT="build\gtest-1.7.0"``` replace generator name with version of studio that you have
 
 ###Building by Visual Studio 2005 and above
 * Open ```Developer Command Prompt``` for your version of Visual Studio
