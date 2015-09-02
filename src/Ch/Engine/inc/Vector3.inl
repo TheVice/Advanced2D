@@ -5,12 +5,12 @@ namespace Advanced2D
 {
 
 template<class T>
-Vector3<T>::Vector3() : mX(0.0), mY(0.0), mZ(0.0)
+Vector3<T>::Vector3() : mX(0), mY(0), mZ(0)
 {
 }
 
 template<class T>
-Vector3<T>::Vector3(const Vector3& aVector3)
+Vector3<T>::Vector3(const Vector3<T>& aVector3)
 {
 	*this = aVector3;
 }
@@ -29,19 +29,19 @@ void Vector3<T>::move(T aDeltaX, T aDeltaY, T aDeltaZ)
 }
 
 template<class T>
-void Vector3<T>::operator += (const Vector3& aVector3)
+void Vector3<T>::operator += (const Vector3<T>& aVector3)
 {
 	move(aVector3.mX, aVector3.mY, aVector3.mZ);
 }
 
 template<class T>
-void Vector3<T>::operator -= (const Vector3& aVector3)
+void Vector3<T>::operator -= (const Vector3<T>& aVector3)
 {
 	move(-1 * aVector3.mX, -1 * aVector3.mY, -1 * aVector3.mZ);
 }
 
 template<class T>
-void Vector3<T>::operator *= (const Vector3& aVector3)
+void Vector3<T>::operator *= (const Vector3<T>& aVector3)
 {
 	mX = mX * aVector3.mX;
 	mY = mY * aVector3.mY;
@@ -49,7 +49,7 @@ void Vector3<T>::operator *= (const Vector3& aVector3)
 }
 
 template<class T>
-void Vector3<T>::operator /= (const Vector3& aVector3)
+void Vector3<T>::operator /= (const Vector3<T>& aVector3)
 {
 	mX = mX / aVector3.mX;
 	mY = mY / aVector3.mY;
@@ -57,7 +57,7 @@ void Vector3<T>::operator /= (const Vector3& aVector3)
 }
 
 template<class T>
-bool Vector3<T>::operator == (const Vector3& aVector3) const
+bool Vector3<T>::operator == (const Vector3<T>& aVector3) const
 {
 	return (
 	           ((aVector3.mX - 0.0001) < mX) && (mX < (0.0001 + aVector3.mX)) &&
@@ -66,13 +66,13 @@ bool Vector3<T>::operator == (const Vector3& aVector3) const
 }
 
 template<class T>
-bool Vector3<T>::operator != (const Vector3& aVector3) const
+bool Vector3<T>::operator != (const Vector3<T>& aVector3) const
 {
 	return (!(*this == aVector3));
 }
 
 template<class T>
-Vector3<T>& Vector3<T>::operator = (const Vector3& aVector3)
+Vector3<T>& Vector3<T>::operator = (const Vector3<T>& aVector3)
 {
 	mX = aVector3.mX;
 	mY = aVector3.mY;
@@ -81,7 +81,7 @@ Vector3<T>& Vector3<T>::operator = (const Vector3& aVector3)
 }
 
 template<class T>
-T Vector3<T>::distance2D(const Vector3& aVector3)
+T Vector3<T>::distance2D(const Vector3<T>& aVector3)
 {
 	return sqrt(pow((aVector3.mX - mX), 2) + pow((aVector3.mY - mY), 2));
 }
@@ -93,13 +93,13 @@ T Vector3<T>::length() const
 }
 
 template<class T>
-T Vector3<T>::dotProduct(const Vector3& aVector3)
+T Vector3<T>::dotProduct(const Vector3<T>& aVector3)
 {
 	return (aVector3.mX * mX + aVector3.mY * mY + aVector3.mZ * mZ);
 }
 
 template<class T>
-Vector3<T> Vector3<T>::crossProduct(const Vector3& aVector3) const
+Vector3<T> Vector3<T>::crossProduct(const Vector3<T>& aVector3) const
 {
 	return Vector3(mY * aVector3.mZ - mZ * aVector3.mY,
 	               mZ * aVector3.mY - mX * aVector3.mZ,

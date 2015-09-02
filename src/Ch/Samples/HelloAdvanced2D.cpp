@@ -22,6 +22,10 @@ void game_render3d()
 {
 }
 
+void game_render2d()
+{
+}
+
 void game_end()
 {
 }

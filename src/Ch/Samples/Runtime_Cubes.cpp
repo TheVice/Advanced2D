@@ -48,9 +48,14 @@ void game_render3d()
 	mesh->draw();
 }
 
+void game_render2d()
+{
+}
 
 void game_end()
 {
 	delete mesh;
+	mesh = NULL;
 	delete camera;
+	camera = NULL;
 }

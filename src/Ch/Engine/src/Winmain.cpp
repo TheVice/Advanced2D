@@ -106,6 +106,8 @@ int WINAPI _tWinMain(HINSTANCE aInstance, HINSTANCE aPrevInst, LPTSTR aCmdArgs,
 		Advanced2D::Engine::close();
 		MessageBox(HWND_DESKTOP, TEXT("Error while game_init!"),
 		           TEXT("Error"), MB_ICONERROR);
+		delete g_engine;
+		return -1;
 	}
 
 	ShowWindow(hwnd, aWinMode);

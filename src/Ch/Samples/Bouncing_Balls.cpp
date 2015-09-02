@@ -2,7 +2,6 @@
 #include "Advanced2D.h"
 #include "Camera.h"
 #include "Mesh.h"
-#include <time.h>
 #include <vector>
 
 using namespace Advanced2D;
@@ -28,7 +27,6 @@ bool game_preload()
 
 bool game_init()
 {
-	srand((unsigned int)time(NULL));
 	//set the camera and perspective
 	camera = new Camera();
 	camera->setPosition(0.0f, 2.0f, 10.0f);
@@ -91,9 +89,14 @@ void game_render3d()
 	}
 }
 
+void game_render2d()
+{
+}
+
 void game_end()
 {
 	delete camera;
+	camera = NULL;
 
 	for (iter i = entities.begin(); i != entities.end(); ++i)
 	{

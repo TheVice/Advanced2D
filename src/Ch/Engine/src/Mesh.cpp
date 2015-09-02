@@ -23,7 +23,7 @@ Mesh::Mesh(const _TCHAR* aFilePath) :
 		if (FAILED(D3DXLoadMeshFromX(aFilePath, D3DXMESH_SYSTEMMEM,
 		                             g_engine->getDevice(), NULL, &materialBuffer, NULL, &mMaterialCount, &mMesh)))
 		{
-			throw new std::exception("Unable to call D3DXLoadMeshFromX");
+			throw new std::exception();
 		}
 
 		mD3dxMaterials = static_cast<LPD3DXMATERIAL>
@@ -51,7 +51,7 @@ Mesh::Mesh(const _TCHAR* aFilePath) :
 				if (FAILED(D3DXCreateTextureFromFile(g_engine->getDevice(),
 				                                     mD3dxMaterials[i].pTextureFilename, &mTextures[i])))
 				{
-					throw new std::exception("Unable to call D3DXCreateTextureFromFile");
+					throw new std::exception();
 				}
 
 #else
@@ -67,7 +67,7 @@ Mesh::Mesh(const _TCHAR* aFilePath) :
 				{
 					delete[] szPathW;
 					szPathW = NULL;
-					throw new std::exception("Unable to call D3DXCreateTextureFromFile");
+					throw new std::exception();
 				}
 
 				delete[] szPathW;
@@ -98,7 +98,7 @@ void Mesh::createSphere(float aRadius, int aSlices, int aStacks)
 	                            &mMesh,
 	                            NULL)))
 	{
-		throw new std::exception("Unable to call D3DXCreateSphere");
+		throw new std::exception();
 	}
 }
 
@@ -107,7 +107,7 @@ void Mesh::createCube(float aWidth, float aHeight, float aDepth)
 	if (FAILED(D3DXCreateBox(g_engine->getDevice(), aWidth, aHeight, aDepth, &mMesh,
 	                         NULL)))
 	{
-		throw new std::exception("Unable to call D3DXCreateBox");
+		throw new std::exception();
 	}
 }
 
@@ -229,7 +229,7 @@ void Mesh::draw()
 
 		if (FAILED(mMesh->DrawSubset(static_cast<DWORD>(i))))
 		{
-			throw new std::exception("Unable to call DrawSubset");
+			throw new std::exception();
 		}
 	}
 }
@@ -248,7 +248,7 @@ void Mesh::transform()
 
 	if (FAILED(g_engine->getDevice()->SetTransform(D3DTS_WORLD, &mMaterialWorld)))
 	{
-		throw new std::exception("Unable to call DrawSubset");
+		throw new std::exception();
 	}
 }
 

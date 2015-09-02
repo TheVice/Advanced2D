@@ -157,8 +157,8 @@ TEST_F(TestVector3Float, distance2D)
 	mVector2->mY = 2.0f;
 	mVector2->mZ = 0.0f;
 	//
-	ASSERT_FLOAT_EQ(sqrt(2), mVector1->distance2D(*mVector2));
-	ASSERT_FLOAT_EQ(sqrt(2), mVector2->distance2D(*mVector1));
+	ASSERT_FLOAT_EQ(sqrt(2.0f), mVector1->distance2D(*mVector2));
+	ASSERT_FLOAT_EQ(sqrt(2.0f), mVector2->distance2D(*mVector1));
 	ASSERT_FLOAT_EQ(0, mVector1->distance2D(*mVector1));
 	ASSERT_FLOAT_EQ(0, mVector2->distance2D(*mVector2));
 }
@@ -169,7 +169,7 @@ TEST_F(TestVector3Float, length)
 	mVector1->mX = 1.0f;
 	mVector1->mY = 1.0f;
 	mVector1->mZ = 0.0f;
-	ASSERT_FLOAT_EQ(sqrt(2), mVector1->length());
+	ASSERT_FLOAT_EQ(sqrt(2.0f), mVector1->length());
 }
 
 TEST_F(TestVector3Float, dotProduct)

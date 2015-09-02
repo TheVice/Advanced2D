@@ -147,7 +147,7 @@ Engine::Engine(HWND aWindowHandle) :
 
 	if (!mDirect3d)
 	{
-		throw new std::exception("Unable to fill mDirect3d");
+		throw new std::exception();
 	}
 
 	D3DDISPLAYMODE displayMode;
@@ -155,7 +155,7 @@ Engine::Engine(HWND aWindowHandle) :
 
 	if (FAILED(mDirect3d->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &displayMode)))
 	{
-		throw new std::exception("Unable to call GetAdapterDisplayMode");
+		throw new std::exception();
 	}
 
 	D3DPRESENT_PARAMETERS presentationParameters;
@@ -179,7 +179,7 @@ Engine::Engine(HWND aWindowHandle) :
 	               &presentationParameters,
 	               &mDirect3dDevice)))
 	{
-		throw new std::exception("Unable to call CreateDevice");
+		throw new std::exception();
 	}
 
 	clearScene(D3DCOLOR_XRGB(0, 0, 0));
@@ -188,23 +188,23 @@ Engine::Engine(HWND aWindowHandle) :
 	if (FAILED(mDirect3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO,
 	           &mBackBuffer)))
 	{
-		throw new std::exception("Unable to call GetBackBuffer");
+		throw new std::exception();
 	}
 
 	//use ambient lighting and z-buffering
 	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE)))
 	{
-		throw new std::exception("Unable to call SetRenderState");
+		throw new std::exception();
 	}
 
 	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID)))
 	{
-		throw new std::exception("Unable to call SetRenderState");
+		throw new std::exception();
 	}
 
 	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE)))
 	{
-		throw new std::exception("Unable to call SetRenderState");
+		throw new std::exception();
 	}
 
 	setAmbient(mAmbientColor);
@@ -212,7 +212,7 @@ Engine::Engine(HWND aWindowHandle) :
 	//initialize 2D render
 	if (D3D_OK != D3DXCreateSprite(mDirect3dDevice, &mSpriteHandler))
 	{
-		throw new std::exception("Unable to call D3DXCreateSprite");
+		throw new std::exception();
 	}
 
 	setDefaultMaterial();
@@ -253,7 +253,7 @@ void Engine::clearScene(D3DCOLOR aColor)
 	if (FAILED(mDirect3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
 	                                  aColor, 1.0f, 0)))
 	{
-		throw new std::exception("Unable to call Clear");
+		throw new std::exception();
 	}
 }
 
@@ -264,7 +264,7 @@ void Engine::setIdentity()
 
 	if (FAILED(mDirect3dDevice->SetTransform(D3DTS_WORLD, &matrixWorld)))
 	{
-		throw new std::exception("Unable to call SetTransform");
+		throw new std::exception();
 	}
 }
 
@@ -279,7 +279,7 @@ void Engine::setDefaultMaterial()
 
 	if (FAILED(mDirect3dDevice->SetMaterial(&material)))
 	{
-		throw new std::exception("Unable to call SetMaterial");
+		throw new std::exception();
 	}
 }
 
@@ -289,7 +289,7 @@ void Engine::setAmbient(D3DCOLOR aAmbientColor)
 
 	if (FAILED(mDirect3dDevice->SetRenderState(D3DRS_AMBIENT, mAmbientColor)))
 	{
-		throw new std::exception("Unable to call SetRenderState");
+		throw new std::exception();
 	}
 }
 
@@ -311,6 +311,26 @@ int Engine::renderStop()
 	}
 
 	if (D3D_OK != mDirect3dDevice->Present(NULL, NULL, NULL, NULL))
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+int Engine::render2dStart()
+{
+	if (FAILED(mSpriteHandler->Begin(D3DXSPRITE_ALPHABLEND)))
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+int Engine::render2dStop()
+{
+	if (FAILED(mSpriteHandler->End()))
 	{
 		return 0;
 	}
@@ -376,6 +396,10 @@ void Engine::update()
 		renderStart();
 		//let game do it's own 3D
 		game_render3d();
+		//2D rendering
+		render2dStart();
+		game_render2d();
+		render2dStop();
 		//done rendering
 		renderStop();
 	}

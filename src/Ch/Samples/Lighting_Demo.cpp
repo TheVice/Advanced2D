@@ -88,10 +88,16 @@ void game_render3d()
 	mesh->draw();
 }
 
+void game_render2d()
+{
+}
 
 void game_end()
 {
 	delete camera;
+	camera = NULL;
 	delete mesh;
+	mesh = NULL;
 	delete light;
+	light = NULL;
 }
