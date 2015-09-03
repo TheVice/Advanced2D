@@ -173,10 +173,10 @@ if(DEFINED GTEST_ROOT)
                   ${CMAKE_SOURCE_DIR}/Ch/Tests/TestVector3.cpp
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)
-    add_executable(TestVector3 ${SRC_FILES})
-    target_include_directories(TestVector3 PRIVATE ${chapterPath}/Engine/inc)
-    target_include_directories(TestVector3 SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
-    target_link_libraries(TestVector3 ${REQUIRED_LIBRARIES})
+    add_executable(TestVector3_ANSI ${SRC_FILES})
+    target_include_directories(TestVector3_ANSI PRIVATE ${chapterPath}/Engine/inc)
+    target_include_directories(TestVector3_ANSI SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+    target_link_libraries(TestVector3_ANSI ${REQUIRED_LIBRARIES})
     if(MSVC)
       set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Tests/TestVector3.cpp
                     ${GTEST_LIBRARY}/src/gtest-all.cc
@@ -191,6 +191,7 @@ if(DEFINED GTEST_ROOT)
 
     add_test(TestAdvanced2d_ANSI TestAdvanced2d_ANSI)
     add_test(TestTimer_ANSI TestTimer_ANSI)
+    add_test(TestVector3_ANSI TestVector3_ANSI)
     if(MSVC)
       add_test(TestAdvanced2d_Unicode TestAdvanced2d_Unicode)
       add_test(TestTimer_Unicode TestTimer_Unicode)

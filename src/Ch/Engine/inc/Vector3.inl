@@ -101,9 +101,9 @@ T Vector3<T>::dotProduct(const Vector3<T>& aVector3)
 template<class T>
 Vector3<T> Vector3<T>::crossProduct(const Vector3<T>& aVector3) const
 {
-	return Vector3(mY * aVector3.mZ - mZ * aVector3.mY,
-	               mZ * aVector3.mY - mX * aVector3.mZ,
-	               mX * aVector3.mY - mY * aVector3.mX);
+	return Vector3<T>(mY * aVector3.mZ - mZ * aVector3.mY,
+	                  mZ * aVector3.mY - mX * aVector3.mZ,
+	                  mX * aVector3.mY - mY * aVector3.mX);
 }
 
 template<class T>
@@ -116,7 +116,7 @@ Vector3<T> Vector3<T>::normal() const
 		l = 1 / l;
 	}
 
-	return Vector3(mX * l, mY * l, mZ * l);
+	return Vector3<T>(mX * l, mY * l, mZ * l);
 }
 
 template<class T>

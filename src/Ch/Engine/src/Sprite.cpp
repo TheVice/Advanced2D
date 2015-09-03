@@ -57,6 +57,8 @@ bool Sprite::loadImage(const _TCHAR* aFileName, D3DCOLOR aTransColor)
 	if (mImageLoaded)
 	{
 		delete mImage;
+		mImage = NULL;
+		mImageLoaded = false;
 	}
 
 	try
