@@ -301,32 +301,62 @@ void Sprite::setCollisionMethod(CollisionType aCollisionType)
 
 void Sprite::move()
 {
-	if ((mMoveTimer > 0) &&
-	    (Timer::getTimer() > (static_cast<DWORD>(mMoveStart + mMoveTimer))))
+	if (mMoveTimer > 0)
 	{
-		mMoveStart = Timer::getTimer();
+		if (Timer::getTimer() > (static_cast<DWORD>(mMoveStart + mMoveTimer)))
+		{
+			//reset move timer
+			mMoveStart = Timer::getTimer();
+			//move sprite by velocity amount
+			mPosition.mX += mVelocity.mX;
+			mPosition.mY += mVelocity.mY;
+		}
 	}
-
-	mPosition.mX += mVelocity.mX;
-	mPosition.mY += mVelocity.mY;
+	else
+	{
+		//no movement timer--update at cpu clock speed
+		mPosition.mX += mVelocity.mX;
+		mPosition.mY += mVelocity.mY;
+	}
 }
 
 void Sprite::animate()
 {
-	if ((mFrameTimer > 0) &&
-	    (Timer::getTimer() > (static_cast<DWORD>(mFrameStart + mFrameTimer))))
+	//update frame based on animdir
+	if (mFrameTimer > 0)
 	{
-		mFrameStart = Timer::getTimer();
-		mCurrentFrame += mAnimDirection;
-	}
+		if (Timer::getTimer() > (static_cast<DWORD>(mFrameStart + mFrameTimer)))
+		{
+			//reset animation timer
+			mFrameStart = Timer::getTimer();
+			mCurrentFrame += mAnimDirection;
 
-	if (mCurrentFrame < 0)
-	{
-		mCurrentFrame = mTotalFrames - 1;
+			//keep frame within bounds
+			if (mCurrentFrame < 0)
+			{
+				mCurrentFrame = mTotalFrames - 1;
+			}
+
+			if (mCurrentFrame > mTotalFrames - 1)
+			{
+				mCurrentFrame = 0;
+			}
+		}
 	}
-	else if (mCurrentFrame > mTotalFrames - 1)
+	else
 	{
-		mCurrentFrame = 0;
+		//no animation timer--update at cpu clock speed
+		mCurrentFrame += mAnimDirection;
+
+		if (mCurrentFrame < 0)
+		{
+			mCurrentFrame = mTotalFrames - 1;
+		}
+
+		if (mCurrentFrame > mTotalFrames - 1)
+		{
+			mCurrentFrame = 0;
+		}
 	}
 }
 

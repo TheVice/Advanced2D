@@ -148,6 +148,35 @@ if(DEFINED GTEST_ROOT)
     endif(MSVC)
     #TestAdvanced2d
 
+    #TestParticleEmitter
+    set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Advanced2d.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/ParticleEmitter.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/ParticleEmitter.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Sprite.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Sprite.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Texture.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Texture.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Winmain.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Winmain.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Tests/TestParticleEmitter.cpp
+                  ${GTEST_LIBRARY}/src/gtest-all.cc
+                  ${GTEST_LIBRARY}/src/gtest_main.cc)
+    add_executable(TestParticleEmitter_ANSI ${SRC_FILES})
+    target_include_directories(TestParticleEmitter_ANSI PRIVATE ${chapterPath}/Engine/inc)
+    target_include_directories(TestParticleEmitter_ANSI SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+    target_link_libraries(TestParticleEmitter_ANSI ${REQUIRED_LIBRARIES})
+    if(MSVC)
+      add_executable(TestParticleEmitter_Unicode ${SRC_FILES})
+      set_target_properties(TestParticleEmitter_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
+      target_include_directories(TestParticleEmitter_Unicode PRIVATE ${chapterPath}/Engine/inc)
+      target_include_directories(TestParticleEmitter_Unicode SYSTEM PRIVATE ${GTEST_INCLUDE_DIR} ${GTEST_LIBRARY})
+      target_link_libraries(TestParticleEmitter_Unicode ${REQUIRED_LIBRARIES})
+    endif(MSVC)
+    #TestParticleEmitter
+
     #TestTimer
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp
