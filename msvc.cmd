@@ -87,10 +87,10 @@ goto DONE_ENGINE
 link /lib %OBJ_FILES% /out:"%CURRENT_DIR%\build\MSVC%MSVC_VER%\Engine.lib"
 
 :DONE_ENGINE
-set CPP_FILES=
-for %%x in ("%CURRENT_DIR%\src\Ch\Samples\*.cpp") do set CPP_FILES=!CPP_FILES! "%%x"
-set CPP_FILES=%CPP_FILES:~1%
-cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "_LIB" /D "DIRECTINPUT_VERSION=0x0800" %CPP_FILES% kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
+::set CPP_FILES=
+::for %%x in ("%CURRENT_DIR%\src\Ch\Samples\*.cpp") do set CPP_FILES=!CPP_FILES! "%%x"
+::set CPP_FILES=%CPP_FILES:~1%
+::cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "_LIB" /D "DIRECTINPUT_VERSION=0x0800" %CPP_FILES% kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
 
 :END_BUILD
 cd %CURRENT_DIR%

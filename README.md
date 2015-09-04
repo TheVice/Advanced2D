@@ -11,7 +11,9 @@ Addition information can be found at [Game Development Forum » Book Support Are
 ###Dependencies
 * Windows Platform SDK (some version of Visual Studio have build in)
 * Microsoft DirectX SDK (Visual Studio 2012 and above have build in, but project require DXUT that provide only by Microsoft DirectX SDK)
-* Audio library [FMOD/FMOD Ex](http://www.fmod.org/download-previous-products/) version 3 or 4 for chapter 6 and above
+* Audio library [FMOD or FMOD Ex](http://www.fmod.org/download-previous-products/)
+  * FMOD version 3 - tested on ```fmodapi375win.zip```, early available at ```http://www.fmod.org/files/fmodapi375win.zip```, with MD5 ```4d28a685a92557c0dac06f9ab2567203``` SHA-1 ```645bc5aa354a1f3932da30e0517c7a1552fc608d``` 
+  * FMOD Ex version 4 - original develop for ```FMOD Ex version 4.06.33 (Stable) released on 2007-10-12```, still work with actual ```4.x``` version
 * Script library [Lua](http://lua-users.org/wiki/LuaBinaries) - for chapter 11 and lua based samples
 * [Google C++ Testing Framework](https://github.com/google/googletest) - only for tests. In this case you must manual call ```cmake``` and set to it path to ```gtest``` folder. For example if ```gtest``` version ```1.7``` at ```build``` sub directory - call from it will be next ```cmake ..\src -G "Visual Studio 9 2008" -DGTEST_ROOT="build\gtest-1.7.0"``` replace generator name with version of studio that you have
 

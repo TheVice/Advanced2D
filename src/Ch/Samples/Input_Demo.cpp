@@ -63,17 +63,17 @@ void game_keyPress(int)
 {
 }
 
-void game_keyRelease(int key)
+void game_keyRelease(int aKey)
 {
-	if (DIK_ESCAPE == key)
+	if (DIK_ESCAPE == aKey)
 	{
 		g_engine->shutdown();
 	}
 }
 
-void game_mouseButton(int button)
+void game_mouseButton(int aButton)
 {
-	switch (button)
+	switch (aButton)
 	{
 		case 0://button 1
 			p->setVelocity((rand() % 10 - 5) / 500.0f);
@@ -86,10 +86,10 @@ void game_mouseMotion(int, int)
 {
 }
 
-void game_mouseMove(int x, int y)
+void game_mouseMove(int aX, int aY)
 {
-	float fx = static_cast<float>(x);
-	float fy = static_cast<float>(y);
+	float fx = static_cast<float>(aX);
+	float fy = static_cast<float>(aY);
 	cursor->setPosition2D(fx, fy);
 	p->setPosition2D(fx, fy);
 }

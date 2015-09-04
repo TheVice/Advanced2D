@@ -1,6 +1,5 @@
 
 #include "Input.h"
-#include <exception>
 
 namespace Advanced2D
 {
@@ -14,54 +13,16 @@ Input::Input(HWND aWindow) :
 	mMouseState(),
 	mPosition()
 {
-	if (FAILED(DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION,
-	                              IID_IDirectInput8, reinterpret_cast<void**>(&mDirectInput),
-	                              NULL))) //(void **)&mDirectInput, NULL))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mDirectInput->CreateDevice(GUID_SysKeyboard, &mKeyboard, NULL)))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mKeyboard->SetDataFormat(&c_dfDIKeyboard)))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mKeyboard->SetCooperativeLevel(mWindow,
-	           DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mKeyboard->Acquire()))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mDirectInput->CreateDevice(GUID_SysMouse, &mMouse, NULL)))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mMouse->SetDataFormat(&c_dfDIMouse)))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mMouse->SetCooperativeLevel(mWindow,
-	                                       DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)))
-	{
-		//throw new std::exception();
-	}
-
-	if (FAILED(mMouse->Acquire()))
-	{
-		//throw new std::exception();
-	}
+	DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION,
+	                   IID_IDirectInput8, reinterpret_cast<void**>(&mDirectInput), NULL);
+	mDirectInput->CreateDevice(GUID_SysKeyboard, &mKeyboard, NULL);
+	mKeyboard->SetDataFormat(&c_dfDIKeyboard);
+	mKeyboard->SetCooperativeLevel(mWindow, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	mKeyboard->Acquire();
+	mDirectInput->CreateDevice(GUID_SysMouse, &mMouse, NULL);
+	mMouse->SetDataFormat(&c_dfDIMouse);
+	mMouse->SetCooperativeLevel(mWindow, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	mMouse->Acquire();
 }
 
 void Input::update()

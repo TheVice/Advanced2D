@@ -16,12 +16,36 @@ if(DEFINED ADDITION_LINK_DIRECTORY)
   link_directories(${LINK_DIRECTORIES} ${ADDITION_LINK_DIRECTORY})
 endif(DEFINED ADDITION_LINK_DIRECTORY)
 
-set(REQUIRED_LIBRARIES)
-list(APPEND REQUIRED_LIBRARIES d3d9)
-list(APPEND REQUIRED_LIBRARIES d3dx9)
-list(APPEND REQUIRED_LIBRARIES dxguid)
-list(APPEND REQUIRED_LIBRARIES dinput8)
-list(APPEND REQUIRED_LIBRARIES winmm)
+if(DEFINED ENV{FMOD_ROOT})
+    string(REPLACE "\\" "/" FMOD_ROOT_DIR $ENV{FMOD_ROOT})
+elseif(DEFINED FMOD_ROOT)
+    string(REPLACE "\\" "/" FMOD_ROOT_DIR ${FMOD_ROOT})
+else()
+    message(FATAL_ERROR "Set to FMOD_ROOT path to FMOD 3 or FMODEX 4 dir")
+endif()
+
+set(REQUIRED_LIBRARIES d3d9 d3dx9 dxguid dinput8 winmm)
+
+if(EXISTS ${FMOD_ROOT_DIR}/api/fmod.dll)
+  if(MSVC)
+    list(APPEND REQUIRED_LIBRARIES fmodvc)
+  else()
+    list(APPEND REQUIRED_LIBRARIES fmod)
+  endif(MSVC)
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${FMOD_ROOT_DIR}/api/fmod.dll ${CMAKE_BINARY_DIR}/fmod.dll)
+elseif(EXISTS ${FMOD_ROOT_DIR}/api/fmodex.dll)
+  if(MSVC)
+    list(APPEND REQUIRED_LIBRARIES fmodex_vc)
+  else()
+    list(APPEND REQUIRED_LIBRARIES fmodex)
+  endif(MSVC)
+  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${FMOD_ROOT_DIR}/api/fmodex.dll ${CMAKE_BINARY_DIR}/fmodex.dll)
+else()
+    message(FATAL_ERROR "Unable to find fmod.dll or fmodex.dll")
+endif()
+
+include_directories(SYSTEM ${FMOD_ROOT_DIR}/api/inc)
+link_directories(${LINK_DIRECTORIES} ${FMOD_ROOT_DIR}/api/lib)
 
 if(NOT MSVC)
   list(APPEND REQUIRED_LIBRARIES pthread)
@@ -91,7 +115,7 @@ if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${Chapter})
       set(source ${chapterPath}/${resourceFile})
       add_custom_command(
         TARGET ${libraryName}_ANSI
-        COMMAND ${CMAKE_COMMAND} -E copy ${source} ${target}
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${source} ${target}
         DEPENDS ${source}
         COMMENT "Copying ${source} to ${target}"
       )
@@ -128,6 +152,8 @@ if(DEFINED GTEST_ROOT)
     #TestAdvanced2d
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Advanced2d.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Audio.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Audio.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Input.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Input.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
@@ -151,6 +177,8 @@ if(DEFINED GTEST_ROOT)
     #TestParticleEmitter
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Advanced2d.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Audio.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Audio.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Input.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Input.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/ParticleEmitter.cpp

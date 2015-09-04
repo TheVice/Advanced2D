@@ -1,6 +1,7 @@
 
 #include "Advanced2D.h"
 #include "Input.h"
+#include "Audio.h"
 #include <sstream>
 
 namespace Advanced2D
@@ -201,7 +202,8 @@ Engine::Engine(HWND aWindowHandle) :
 	mRealTimer(),
 	mFrameCountReal(0),
 	mFrameRateReal(0),
-	mInput(NULL)
+	mInput(NULL),
+	mAudio(NULL)
 {
 	mDirect3d = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -277,6 +279,12 @@ Engine::Engine(HWND aWindowHandle) :
 
 	setDefaultMaterial();
 	mInput = new Input(mWindowHandle);
+	mAudio = new Audio();
+
+	if (!mAudio->init())
+	{
+		throw new std::exception();
+	}
 }
 
 HWND Engine::getWindowHandle()
@@ -307,6 +315,11 @@ bool Engine::isPaused()
 void Engine::setPaused(bool aPause)
 {
 	mPause = aPause;
+}
+
+Audio* Engine::getAudio() const
+{
+	return mAudio;
 }
 
 void Engine::clearScene(D3DCOLOR aColor)
@@ -457,6 +470,8 @@ void Engine::update()
 		mInput->update();
 		updateKeyboard();
 		updateMouse();
+		//update audio system
+		mAudio->update();
 		//begin rendering
 		renderStart();
 		//let game do it's own 3D
@@ -474,6 +489,14 @@ Engine::~Engine()
 {
 	delete mInput;
 	mInput = NULL;
+
+	if (mAudio)
+	{
+		mAudio->stopAll();
+	}
+
+	delete mAudio;
+	mAudio = NULL;
 
 	if (mDirect3dDevice)
 	{

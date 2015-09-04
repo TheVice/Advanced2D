@@ -13,6 +13,7 @@
 namespace Advanced2D
 {
 class Input;
+class Audio;
 class Engine
 {
 private:
@@ -53,6 +54,8 @@ private:
 	Input* mInput;
 	void updateKeyboard();
 	void updateMouse();
+
+	Audio* mAudio;
 
 	Engine();
 	Engine(const Engine& aRhs);
@@ -95,6 +98,8 @@ public:
 
 	bool isPaused();
 	void setPaused(bool aPause);
+
+	Audio* getAudio() const;
 
 	void clearScene(D3DCOLOR aColor);
 	void setIdentity();
