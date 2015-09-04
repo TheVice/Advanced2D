@@ -49,6 +49,9 @@ private:
 	int mMoveTimer;
 	float mFaceAngle;
 	float mMoveAngle;
+
+	Sprite(const Sprite& aRhs);
+	Sprite& operator=(const Sprite& aRhs);
 protected:
 	void transform();
 public:

@@ -1,5 +1,6 @@
 
 #include "Advanced2D.h"
+#include "Input.h"
 #include <sstream>
 
 namespace Advanced2D
@@ -127,6 +128,64 @@ void Engine::showFatalMessage(const _TCHAR* aMessage, const _TCHAR* aTitle)
 	shutdown();
 }
 
+void Engine::updateKeyboard()
+{
+	static unsigned char oldKeys[256];
+
+	for (int n = 0; n < 255; ++n)
+	{
+		//check for key press
+		if (mInput->getKeyState(n) & 0x80)
+		{
+			game_keyPress(n);
+			oldKeys[n] = mInput->getKeyState(n);
+		}
+		//check for release
+		else if (oldKeys[n] & 0x80)
+		{
+			game_keyRelease(n);
+			oldKeys[n] = mInput->getKeyState(n);
+		}
+	}
+}
+
+void Engine::updateMouse()
+{
+	static int oldPosX = 0;
+	static int oldPosY = 0;
+	int deltaX = mInput->getDeltaX();
+	int deltaY = mInput->getDeltaY();
+
+	//check mouse buttons 1-3
+	for (unsigned char n = 0; n < 4; ++n)
+	{
+		if (mInput->getMouseButton(n))
+		{
+			game_mouseButton(n);
+		}
+	}
+
+	//check mouse position
+	if (mInput->getPosX() != oldPosX || mInput->getPosY() != oldPosY)
+	{
+		game_mouseMove(oldPosX = mInput->getPosX(), oldPosY = mInput->getPosY());
+	}
+
+	//check mouse motion
+	if (deltaX || deltaY)
+	{
+		game_mouseMotion(deltaX, deltaY);
+	}
+
+	//check mouse wheel
+	int wheel = mInput->getDeltaWheel();
+
+	if (wheel)
+	{
+		game_mouseWheel(wheel);
+	}
+}
+
 Engine::Engine(HWND aWindowHandle) :
 	mWindowHandle(aWindowHandle),
 	mDirect3d(NULL),
@@ -141,7 +200,8 @@ Engine::Engine(HWND aWindowHandle) :
 	mFrameRateCore(0),
 	mRealTimer(),
 	mFrameCountReal(0),
-	mFrameRateReal(0)
+	mFrameRateReal(0),
+	mInput(NULL)
 {
 	mDirect3d = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -216,6 +276,7 @@ Engine::Engine(HWND aWindowHandle) :
 	}
 
 	setDefaultMaterial();
+	mInput = new Input(mWindowHandle);
 }
 
 HWND Engine::getWindowHandle()
@@ -392,6 +453,10 @@ void Engine::update()
 			mFrameCountReal = 0;
 		}
 
+		//update input devices
+		mInput->update();
+		updateKeyboard();
+		updateMouse();
 		//begin rendering
 		renderStart();
 		//let game do it's own 3D
@@ -407,6 +472,9 @@ void Engine::update()
 
 Engine::~Engine()
 {
+	delete mInput;
+	mInput = NULL;
+
 	if (mDirect3dDevice)
 	{
 		mDirect3dDevice->Release();

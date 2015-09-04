@@ -157,7 +157,7 @@ void ParticleEmitter::update()
 
 void ParticleEmitter::add()
 {
-	static const float M_PI_180 = M_PI / 180.0f;
+	static const float M_PI_180 = static_cast<float>(M_PI / 180.0f);
 	//create a new particle
 	Sprite* p = new Sprite();
 	p->setImage(mImage);

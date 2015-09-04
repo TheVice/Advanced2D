@@ -130,9 +130,9 @@ void game_update()
 	pc->setDirection(pc->getDirection() + 0.2f);
 	pc->update();
 	//update the rotating emitter
-	static const double unit = M_PI / 36000.0f;
-	static const double radius = 150.0f;
-	static double angle = 0.0f;
+	static const float unit = static_cast<float>(M_PI / 36000.0f);
+	static const float radius = 150.0f;
+	static float angle = 0.0f;
 	angle += unit;
 
 	if (angle > 360)
@@ -140,8 +140,8 @@ void game_update()
 		angle = 360 - angle;
 	}
 
-	double x = 750 + cos(angle) * radius;
-	double y = 500 + sin(angle) * radius;
+	float x = 750 + cos(angle) * radius;
+	float y = 500 + sin(angle) * radius;
 	pd->setPosition2D(x, y);
 	pd->update();
 	//update smoke emitter
@@ -152,6 +152,30 @@ void game_update()
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_keyPress(int)
+{
+}
+
+void game_keyRelease(int)
+{
+}
+
+void game_mouseButton(int)
+{
+}
+
+void game_mouseMotion(int, int)
+{
+}
+
+void game_mouseMove(int, int)
+{
+}
+
+void game_mouseWheel(int)
+{
 }
 
 void game_render2d()

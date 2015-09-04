@@ -15,7 +15,7 @@ Camera::Camera() :
 	mNearRange(1.0f),
 	mFarRange(2000.0f),
 	mAspectRatio(640.0f / 480.0f), //hard coded ratio to 1.3333 by default
-	mFieldOfView(M_PI_4)
+	mFieldOfView(static_cast<float>(M_PI_4))
 {
 }
 

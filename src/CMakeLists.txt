@@ -128,10 +128,10 @@ if(DEFINED GTEST_ROOT)
     #TestAdvanced2d
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Advanced2d.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Input.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Input.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp
-                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Winmain.h
-                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Winmain.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Tests/TestAdvanced2d.cpp
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)
@@ -151,6 +151,8 @@ if(DEFINED GTEST_ROOT)
     #TestParticleEmitter
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Advanced2d.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Input.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Input.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/ParticleEmitter.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/ParticleEmitter.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Sprite.cpp
@@ -159,8 +161,6 @@ if(DEFINED GTEST_ROOT)
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Texture.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp
-                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Winmain.h
-                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Winmain.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Tests/TestParticleEmitter.cpp
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)
@@ -219,10 +219,12 @@ if(DEFINED GTEST_ROOT)
     #TestVector3
 
     add_test(TestAdvanced2d_ANSI TestAdvanced2d_ANSI)
+    add_test(TestParticleEmitter_ANSI TestParticleEmitter_ANSI)
     add_test(TestTimer_ANSI TestTimer_ANSI)
     add_test(TestVector3_ANSI TestVector3_ANSI)
     if(MSVC)
       add_test(TestAdvanced2d_Unicode TestAdvanced2d_Unicode)
+      add_test(TestParticleEmitter_Unicode TestParticleEmitter_Unicode)
       add_test(TestTimer_Unicode TestTimer_Unicode)
       add_test(TestVector3_Unicode TestVector3_Unicode)
     endif(MSVC)

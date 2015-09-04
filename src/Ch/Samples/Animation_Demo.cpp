@@ -41,14 +41,39 @@ void game_update()
 
 	if (sprite->getCurrentFrame() == sprite->getTotalFrames() - 1)
 	{
-		sprite->setPosition2D((rand() % g_engine->getScreenWidth() - 128),
-		                      rand() % (g_engine->getScreenHeight() - 128));
+		sprite->setPosition2D(static_cast<float>(rand() % g_engine->getScreenWidth() -
+		                      128),
+		                      static_cast<float>(rand() % (g_engine->getScreenHeight() - 128)));
 	}
 
 	if (KEY_DOWN(VK_ESCAPE))
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_keyPress(int)
+{
+}
+
+void game_keyRelease(int)
+{
+}
+
+void game_mouseButton(int)
+{
+}
+
+void game_mouseMotion(int, int)
+{
+}
+
+void game_mouseMove(int, int)
+{
+}
+
+void game_mouseWheel(int)
+{
 }
 
 void game_render2d()

@@ -27,6 +27,9 @@ private:
 	float mVelocity;
 	float mScale;
 	bool mImageLoaded;
+
+	ParticleEmitter(const ParticleEmitter& aRhs);
+	ParticleEmitter& operator=(const ParticleEmitter& aRhs);
 public:
 	ParticleEmitter();
 

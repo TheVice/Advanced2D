@@ -32,10 +32,10 @@ bool game_init()
 
 void game_update()
 {
-	static double scale = 0.01f;
+	static float scale = 0.01f;
 	sprite->setPosition2D(400, 300);
 	sprite->setRotation(Advanced2D::Timer::getTimer() / 600.0f);
-	double s = sprite->getScale() + scale;
+	float s = sprite->getScale() + scale;
 
 	if (s < 0.01f || s > 2.5f)
 	{
@@ -48,6 +48,30 @@ void game_update()
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_keyPress(int)
+{
+}
+
+void game_keyRelease(int)
+{
+}
+
+void game_mouseButton(int)
+{
+}
+
+void game_mouseMotion(int, int)
+{
+}
+
+void game_mouseMove(int, int)
+{
+}
+
+void game_mouseWheel(int)
+{
 }
 
 void game_render2d()

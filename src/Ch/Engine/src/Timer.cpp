@@ -10,10 +10,6 @@ Timer::Timer()
 	reset();
 }
 
-Timer::~Timer()
-{
-}
-
 DWORD Timer::getTimer()
 {
 	return timeGetTime();
@@ -45,6 +41,10 @@ bool Timer::stopwatch(int aMillis)
 	}
 
 	return false;
+}
+
+Timer::~Timer()
+{
 }
 
 }

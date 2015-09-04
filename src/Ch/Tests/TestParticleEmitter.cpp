@@ -17,7 +17,27 @@ void game_update()
 {
 }
 
-void game_render3d()
+void game_keyPress(int)
+{
+}
+
+void game_keyRelease(int)
+{
+}
+
+void game_mouseButton(int)
+{
+}
+
+void game_mouseMotion(int, int)
+{
+}
+
+void game_mouseMove(int, int)
+{
+}
+
+void game_mouseWheel(int)
 {
 }
 
@@ -25,9 +45,16 @@ void game_render2d()
 {
 }
 
+void game_render3d()
+{
+}
+
 void game_end()
 {
 }
+
+bool gameover = false;
+Advanced2D::Engine* g_engine = NULL;
 
 class TestParticleEmitter : public testing::Test
 {
@@ -83,30 +110,28 @@ private:
 		return hwnd;
 	}
 public:
-	Advanced2D::Engine* mEngine;
 	Advanced2D::ParticleEmitter* mParticleEmitter;
 protected:
-	TestParticleEmitter() : mEngine(NULL), mParticleEmitter(NULL)
+	TestParticleEmitter() : mParticleEmitter(NULL)
 	{
+		g_engine = NULL;
 	}
 	virtual void SetUp()
 	{
 		Advanced2D::Engine::setFullScreen(false);
 		HWND hwnd = MakeWindow(GetModuleHandle(NULL), 640, 480);
-		mEngine = new Advanced2D::Engine(hwnd);
-		g_engine = mEngine;
+		g_engine = new Advanced2D::Engine(hwnd);
 		mParticleEmitter = new Advanced2D::ParticleEmitter();
 	}
 	virtual void TearDown()
 	{
 		delete mParticleEmitter;
 		UnregisterClass(CLASS_NAME, GetModuleHandle(NULL));
-		delete mEngine;
+		delete g_engine;
 	}
 	virtual ~TestParticleEmitter()
 	{
 		mParticleEmitter = NULL;
-		mEngine = NULL;
 		g_engine = NULL;
 	}
 };

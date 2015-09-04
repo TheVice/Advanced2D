@@ -10,14 +10,17 @@ class Timer
 private:
 	DWORD mStart;
 	DWORD mStopWatchStart;
+
+	Timer(const Timer& aRhs);
+	Timer& operator=(const Timer& aRhs);
 public:
 	Timer();
-	~Timer();
 	static DWORD getTimer();
 	DWORD getStartTimeMillis();
 	void sleep(int aMillis);
 	void reset();
 	bool stopwatch(int aMillis);
+	virtual ~Timer();
 };
 }
 

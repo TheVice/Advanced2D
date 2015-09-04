@@ -36,6 +36,34 @@ void game_update()
 {
 }
 
+void game_keyPress(int)
+{
+}
+
+void game_keyRelease(int)
+{
+}
+
+void game_mouseButton(int)
+{
+}
+
+void game_mouseMotion(int, int)
+{
+}
+
+void game_mouseMove(int, int)
+{
+}
+
+void game_mouseWheel(int)
+{
+}
+
+void game_render2d()
+{
+}
+
 void game_render3d()
 {
 	//clear the scene using a dark blue color
@@ -46,10 +74,6 @@ void game_render3d()
 	mesh->rotate(2.0f, 0.0f, 0.0f);
 	mesh->transform();
 	mesh->draw();
-}
-
-void game_render2d()
-{
 }
 
 void game_end()

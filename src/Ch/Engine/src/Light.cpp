@@ -54,7 +54,7 @@ D3DLIGHTTYPE Light::getType()
 
 D3DXVECTOR3 Light::getPosition()
 {
-	return this->mLight.Position;
+	return mLight.Position;
 }
 
 void Light::setPosition(const D3DXVECTOR3& aPosition)
@@ -99,12 +99,12 @@ float Light::getZ()
 
 D3DXVECTOR3 Light::getDirection()
 {
-	return this->mLight.Direction;
+	return mLight.Direction;
 }
 
 void Light::setDirection(const D3DXVECTOR3& aDirection)
 {
-	this->mLight.Direction = aDirection;
+	mLight.Direction = aDirection;
 }
 
 void Light::setDirection(float aX, float aY, float aZ)

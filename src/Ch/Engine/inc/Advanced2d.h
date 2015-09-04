@@ -12,6 +12,7 @@
 
 namespace Advanced2D
 {
+class Input;
 class Engine
 {
 private:
@@ -48,6 +49,10 @@ private:
 	Timer mRealTimer;
 	long mFrameCountReal;
 	long mFrameRateReal;
+
+	Input* mInput;
+	void updateKeyboard();
+	void updateMouse();
 
 	Engine();
 	Engine(const Engine& aRhs);
@@ -117,8 +122,14 @@ extern bool gameover;
 extern bool game_preload();
 extern bool game_init();
 extern void game_update();
-extern void game_render3d();
+extern void game_keyPress(int);
+extern void game_keyRelease(int);
+extern void game_mouseButton(int);
+extern void game_mouseMotion(int, int);
+extern void game_mouseMove(int, int);
+extern void game_mouseWheel(int);
 extern void game_render2d();
+extern void game_render3d();
 extern void game_end();
 
 extern Advanced2D::Engine* g_engine;

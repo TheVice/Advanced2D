@@ -11,6 +11,10 @@ class Texture
 private:
 	LPDIRECT3DTEXTURE9 mTexture;
 	D3DXIMAGE_INFO mInfo;
+
+	Texture();
+	Texture(const Texture& aRhs);
+	Texture& operator=(const Texture& aRhs);
 public:
 	Texture(const _TCHAR* aFileName, D3DCOLOR aTransColor);
 	LPDIRECT3DTEXTURE9 getTexture();
