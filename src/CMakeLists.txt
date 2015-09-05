@@ -154,6 +154,8 @@ if(DEFINED GTEST_ROOT)
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Audio.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Audio.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Entity.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Entity.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Input.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Input.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
@@ -179,6 +181,8 @@ if(DEFINED GTEST_ROOT)
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Advanced2d.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Audio.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Audio.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Entity.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Entity.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Input.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Input.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/ParticleEmitter.cpp

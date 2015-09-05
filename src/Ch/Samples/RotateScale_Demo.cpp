@@ -2,7 +2,7 @@
 #include "Advanced2D.h"
 #include "Sprite.h"
 
-Advanced2D::Sprite* sprite = NULL;
+static Advanced2D::Sprite* sprite = NULL;
 
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
 
@@ -32,7 +32,7 @@ bool game_init()
 
 void game_update()
 {
-	static float scale = 0.01f;
+	static float scale = 0.005f;
 	sprite->setPosition2D(400, 300);
 	sprite->setRotation(Advanced2D::Timer::getTimer() / 600.0f);
 	float s = sprite->getScale() + scale;
@@ -48,6 +48,14 @@ void game_update()
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
 }
 
 void game_keyPress(int)

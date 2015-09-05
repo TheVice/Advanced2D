@@ -3,12 +3,11 @@
 #include "Sprite.h"
 #include "ParticleEmitter.h"
 
-using namespace Advanced2D;
-ParticleEmitter* pa = NULL;
-ParticleEmitter* pb = NULL;
-ParticleEmitter* pc = NULL;
-ParticleEmitter* pd = NULL;
-ParticleEmitter* pe = NULL;
+static Advanced2D::ParticleEmitter* pa = NULL;
+static Advanced2D::ParticleEmitter* pb = NULL;
+static Advanced2D::ParticleEmitter* pc = NULL;
+static Advanced2D::ParticleEmitter* pd = NULL;
+static Advanced2D::ParticleEmitter* pe = NULL;
 
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
@@ -25,7 +24,7 @@ bool game_preload()
 bool game_init()
 {
 	g_engine->setMaximizeProcessor(true);
-	pa = new ParticleEmitter();
+	pa = new Advanced2D::ParticleEmitter();
 
 	if (!pa->loadImage(TEXT("particle16.tga")))
 	{
@@ -42,7 +41,7 @@ bool game_init()
 	pa->setSpread(30);
 	pa->setVelocity(2.0f);
 	pa->setLength(250.0f);
-	pb = new ParticleEmitter();
+	pb = new Advanced2D::ParticleEmitter();
 
 	if (!pb->loadImage(TEXT("particle16.tga")))
 	{
@@ -61,7 +60,7 @@ bool game_init()
 	pb->setSpread(40);
 	pb->setVelocity(2.0f);
 	pb->setLength(200.0f);
-	pc = new ParticleEmitter();
+	pc = new Advanced2D::ParticleEmitter();
 
 	if (!pc->loadImage(TEXT("particle16.tga")))
 	{
@@ -80,7 +79,7 @@ bool game_init()
 	pc->setSpread(5);
 	pc->setVelocity(0.2f);
 	pc->setLength(180.0f);
-	pd = new ParticleEmitter();
+	pd = new Advanced2D::ParticleEmitter();
 
 	if (!pd->loadImage(TEXT("particle16.tga")))
 	{
@@ -99,7 +98,7 @@ bool game_init()
 	pd->setSpread(40);
 	pd->setVelocity(2.0f);
 	pd->setLength(100.0f);
-	pe = new ParticleEmitter();
+	pe = new Advanced2D::ParticleEmitter();
 
 	if (!pe->loadImage(TEXT("particle16.tga")))
 	{
@@ -152,6 +151,14 @@ void game_update()
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
 }
 
 void game_keyPress(int)

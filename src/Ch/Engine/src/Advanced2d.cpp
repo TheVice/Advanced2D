@@ -2,6 +2,7 @@
 #include "Advanced2D.h"
 #include "Input.h"
 #include "Audio.h"
+#include "Entity.h"
 #include <sstream>
 
 namespace Advanced2D
@@ -184,6 +185,87 @@ void Engine::updateMouse()
 	if (wheel)
 	{
 		game_mouseWheel(wheel);
+	}
+}
+
+void Engine::updateEntities()
+{
+	for (std::list<Entity*>::iterator iter = mEntities.begin();
+	     iter != mEntities.end(); ++iter)
+	{
+		Entity* entity = *iter;
+
+		if (!entity->isAlive())
+		{
+			continue;
+		}
+
+		entity->move();
+		entity->animate();
+		game_entityUpdate(entity);
+
+		if ((entity->getLifeTime() > 0) && entity->isLifeTimeExpired())
+		{
+			entity->setAlive(false);
+		}
+	}
+}
+
+void Engine::draw2DEntities()
+{
+	for (std::list<Entity*>::iterator iter = mEntities.begin();
+	     iter != mEntities.end(); ++iter)
+	{
+		Entity* entity = *iter;
+
+		if (entity->getRenderType() != RENDER2D)
+		{
+			continue;
+		}
+
+		if (entity->isAlive() && entity->isVisible())
+		{
+			entity->draw();
+			game_entityRender(entity);
+		}
+	}
+}
+
+void Engine::draw3DEntities()
+{
+	for (std::list<Entity*>::iterator iter = mEntities.begin();
+	     iter != mEntities.end(); ++iter)
+	{
+		Entity* entity = *iter;
+
+		if (entity->getRenderType() != RENDER3D)
+		{
+			continue;
+		}
+
+		if (entity->isAlive() && entity->isVisible())
+		{
+			entity->draw();
+			game_entityRender(entity);
+		}
+	}
+}
+
+void Engine::buryEntities()
+{
+	std::list<Entity*>::iterator iter = mEntities.begin();
+
+	while (iter != mEntities.end())
+	{
+		if ((*iter)->isAlive() == false)
+		{
+			delete (*iter);
+			iter = mEntities.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
 	}
 }
 
@@ -447,6 +529,12 @@ void Engine::update()
 	//fast update with no timing
 	game_update();
 
+	//update entities
+	if (!mPause)
+	{
+		updateEntities();
+	}
+
 	//update with 60fps timing
 	if (!timedUpdate.stopwatch(14))
 	{
@@ -476,13 +564,71 @@ void Engine::update()
 		renderStart();
 		//let game do it's own 3D
 		game_render3d();
+
+		if (!mPause)
+		{
+			draw3DEntities();
+		}
+
 		//2D rendering
 		render2dStart();
+
+		if (!mPause)
+		{
+			draw2DEntities();
+		}
+
 		game_render2d();
 		render2dStop();
 		//done rendering
 		renderStop();
 	}
+
+	//remove dead entities from the list
+	buryEntities();
+}
+
+std::list<Entity*>* Engine::getEntityList()
+{
+	return &mEntities;
+}
+
+int Engine::getEntityCount()
+{
+	return mEntities.size();
+}
+
+void Engine::addEntity(Entity* aEntity)
+{
+	mEntities.push_back(aEntity);
+}
+
+Entity* Engine::findEntity(const _TCHAR* aEntityName)
+{
+	for (std::list<Entity*>::iterator iter = mEntities.begin();
+	     iter != mEntities.end(); ++iter)
+	{
+		if ((*iter)->isAlive() && 0 == _tcscmp((*iter)->getName(), aEntityName))
+		{
+			return *iter;
+		}
+	}
+
+	return NULL;
+}
+
+Entity* Engine::findEntity(int aEntityType)
+{
+	for (std::list<Entity*>::iterator iter = mEntities.begin();
+	     iter != mEntities.end(); ++iter)
+	{
+		if ((*iter)->isAlive() && (*iter)->getObjectType() == aEntityType)
+		{
+			return *iter;
+		}
+	}
+
+	return NULL;
 }
 
 Engine::~Engine()

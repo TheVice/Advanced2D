@@ -18,13 +18,12 @@ void Sprite::transform()
 }
 
 Sprite::Sprite() :
+	Entity(RENDER2D),
 	mImageLoaded(false),
 	mImage(NULL),
 	mSize(1, 1, 0),
 	mPosition(),
 	mVelocity(),
-	mVisible(true),
-	mAlive(true),
 	mState(0),
 	mDirection(0),
 	mFrameStart(0),
@@ -41,9 +40,6 @@ Sprite::Sprite() :
 	mCollisionMethod(COLLISION_RECT),
 	mMatRotate(),
 	mMatScale(),
-	mLifetimeLength(0),
-	mObjectType(0),
-	mLifeTimeTimer(),
 	mMoveStart(0),
 	mMoveTimer(16),
 	mFaceAngle(0),
@@ -147,26 +143,6 @@ void Sprite::setVelocity(float aVelocityX, float aVelocityY)
 {
 	mVelocity.mX = aVelocityX;
 	mVelocity.mY = aVelocityY;
-}
-
-bool Sprite::isVisible()
-{
-	return mVisible;
-}
-
-void Sprite::setVisible(bool aVisible)
-{
-	mVisible = aVisible;
-}
-
-bool Sprite::isAlive()
-{
-	return mAlive;
-}
-
-void Sprite::setAlive(bool aAlive)
-{
-	mAlive = aAlive;
 }
 
 int Sprite::getState()

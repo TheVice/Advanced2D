@@ -52,6 +52,14 @@ void game_update()
 	}
 }
 
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
+}
+
 void game_keyPress(int)
 {
 }

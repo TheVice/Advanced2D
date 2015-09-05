@@ -74,6 +74,14 @@ void game_update()
 	g_engine->shutdown();
 }
 
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
+}
+
 void game_keyPress(int)
 {
 }

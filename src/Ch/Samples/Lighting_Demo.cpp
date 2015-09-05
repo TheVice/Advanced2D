@@ -4,17 +4,15 @@
 #include "Light.h"
 #include "Mesh.h"
 
-using namespace Advanced2D;
-
 #define DIRECTLIGHT
 //#define SPOTLIGHT
 //#define POINTLIGHT
 
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
-static Camera* camera = NULL;
-static Light* light = NULL;
-static Mesh* mesh = NULL;
+static Advanced2D::Camera* camera = NULL;
+static Advanced2D::Light* light = NULL;
+static Advanced2D::Mesh* mesh = NULL;
 
 bool game_preload()
 {
@@ -29,14 +27,14 @@ bool game_preload()
 bool game_init()
 {
 	//set the camera and perspective
-	camera = new Camera();
+	camera = new Advanced2D::Camera();
 	camera->setPosition(0.0f, 2.0f, 40.0f);
 	camera->setTarget(0.0f, 0.0f, 0.0f);
 	camera->update();
 
 	try
 	{
-		mesh = new Mesh(TEXT("cytovirus.x"));
+		mesh = new Advanced2D::Mesh(TEXT("cytovirus.x"));
 	}
 	catch (const std::exception&)
 	{
@@ -48,18 +46,18 @@ bool game_init()
 	mesh->setScale(0.1f, 0.1f, 0.1f);
 #if defined(DIRECTLIGHT)
 	//create a directional light
-	light = new Light(0, D3DLIGHT_DIRECTIONAL, D3DXVECTOR3(0.0f, 0.0f,
-	                  0.0f), D3DXVECTOR3(0.0f, -1.0f, 0.0f), 100.0f);
+	light = new Advanced2D::Light(0, D3DLIGHT_DIRECTIONAL, D3DXVECTOR3(0.0f, 0.0f,
+	                              0.0f), D3DXVECTOR3(0.0f, -1.0f, 0.0f), 100.0f);
 #else
 #if defined(SPOTLIGHT)
 	//create the spot light
-	light = new Light(0, D3DLIGHT_SPOT, D3DXVECTOR3(-10.0f, -20.0f,
-	                  0.0f), D3DXVECTOR3(0.0f, 2.0f, 0.0f), 1000.0f);
+	light = new Advanced2D::Light(0, D3DLIGHT_SPOT, D3DXVECTOR3(-10.0f, -20.0f,
+	                              0.0f), D3DXVECTOR3(0.0f, 2.0f, 0.0f), 1000.0f);
 #else
 #if defined(POINTLIGHT)
 	//create the point light
-	light = new Light(0, D3DLIGHT_POINT, D3DXVECTOR3(0.0f, -22.0f,
-	                  0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20.0f);
+	light = new Advanced2D::Light(0, D3DLIGHT_POINT, D3DXVECTOR3(0.0f, -22.0f,
+	                              0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20.0f);
 #endif
 #endif
 #endif
@@ -77,6 +75,14 @@ void game_update()
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
 }
 
 void game_keyPress(int)

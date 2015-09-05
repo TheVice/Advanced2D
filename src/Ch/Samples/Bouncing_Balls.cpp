@@ -4,16 +4,14 @@
 #include "Mesh.h"
 #include <vector>
 
-using namespace Advanced2D;
-
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
-static Camera* camera = NULL;
+static Advanced2D::Camera* camera = NULL;
 
 #define SPHERES 100
 
-typedef std::vector<Mesh*>::iterator iter;
-static std::vector<Mesh*> entities;
+typedef std::vector<Advanced2D::Mesh*>::iterator iter;
+static std::vector<Advanced2D::Mesh*> entities;
 
 bool game_preload()
 {
@@ -28,7 +26,7 @@ bool game_preload()
 bool game_init()
 {
 	//set the camera and perspective
-	camera = new Camera();
+	camera = new Advanced2D::Camera();
 	camera->setPosition(0.0f, 2.0f, 10.0f);
 	camera->setTarget(0.0f, 0.0f, 0.0f);
 	camera->update();
@@ -36,11 +34,11 @@ bool game_init()
 	//create ball meshes
 	for (int n = 0; n < SPHERES; ++n)
 	{
-		Mesh* ball = NULL;
+		Advanced2D::Mesh* ball = NULL;
 
 		try
 		{
-			ball = new Mesh(TEXT("ball.x"));
+			ball = new Advanced2D::Mesh(TEXT("ball.x"));
 		}
 		catch (const std::exception&)
 		{
@@ -64,7 +62,7 @@ void game_update()
 {
 	for (iter i = entities.begin(); i != entities.end(); ++i)
 	{
-		(*i)->update();
+		(*i)->move();
 		(*i)->limitBoundary(-5, 5, 4, -4, 4, -4);
 	}
 
@@ -72,6 +70,14 @@ void game_update()
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
 }
 
 void game_keyPress(int)

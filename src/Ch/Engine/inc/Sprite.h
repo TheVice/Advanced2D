@@ -1,9 +1,8 @@
 #ifndef __SPRITE_H_
 #define __SPRITE_H_
 
-#include "Timer.h"
+#include "Entity.h"
 #include "Vector3.h"
-#include <tchar.h>
 #include <d3dx9.h>
 
 namespace Advanced2D
@@ -16,7 +15,7 @@ enum CollisionType
 	COLLISION_DIST = 2
 };
 
-class Sprite
+class Sprite : public Entity
 {
 private:
 	bool mImageLoaded;
@@ -24,8 +23,6 @@ private:
 	Vector3<int> mSize;
 	Vector3<float> mPosition;
 	Vector3<float> mVelocity;
-	bool mVisible;
-	bool mAlive;
 	int mState;
 	int mDirection;
 	int mFrameStart;
@@ -42,9 +39,6 @@ private:
 	enum CollisionType mCollisionMethod;
 	D3DXMATRIX mMatRotate;
 	D3DXMATRIX mMatScale;
-	int mLifetimeLength;
-	int mObjectType;
-	Timer mLifeTimeTimer;
 	int mMoveStart;
 	int mMoveTimer;
 	float mFaceAngle;
@@ -78,12 +72,6 @@ public:
 	Vector3<float>& getVelocity();
 	void setVelocity(const Vector3<float>& aVelocity);
 	void setVelocity(float aVelocityX, float aVelocityY);
-
-	bool isVisible();
-	void setVisible(bool aVisible);
-
-	bool isAlive();
-	void setAlive(bool aAlive);
 
 	int getState();
 	void setState(int aState);

@@ -3,6 +3,7 @@
 
 #include "Timer.h"
 #include <string>
+#include <list>
 #include <tchar.h>
 #include <d3dx9.h>
 
@@ -14,6 +15,7 @@ namespace Advanced2D
 {
 class Input;
 class Audio;
+class Entity;
 class Engine
 {
 private:
@@ -56,6 +58,13 @@ private:
 	void updateMouse();
 
 	Audio* mAudio;
+
+	void updateEntities();
+	void draw2DEntities();
+	void draw3DEntities();
+	void buryEntities();
+
+	std::list<Entity*> mEntities;
 
 	Engine();
 	Engine(const Engine& aRhs);
@@ -119,6 +128,12 @@ public:
 
 	void update();
 
+	std::list<Entity*>* getEntityList();
+	int getEntityCount();
+	void addEntity(Entity* aEntity);
+	Entity* findEntity(const _TCHAR* aEntityName);
+	Entity* findEntity(int aEntityType);
+
 	virtual ~Engine();
 };
 }
@@ -127,6 +142,8 @@ extern bool gameover;
 extern bool game_preload();
 extern bool game_init();
 extern void game_update();
+extern void game_entityUpdate(Advanced2D::Entity*);
+extern void game_entityRender(Advanced2D::Entity*);
 extern void game_keyPress(int);
 extern void game_keyRelease(int);
 extern void game_mouseButton(int);

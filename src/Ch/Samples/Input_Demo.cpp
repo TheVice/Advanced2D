@@ -4,9 +4,8 @@
 #include "ParticleEmitter.h"
 #include <dinput.h>
 
-using namespace Advanced2D;
-ParticleEmitter* p = NULL;
-Sprite* cursor = NULL;
+static Advanced2D::ParticleEmitter* p = NULL;
+static Advanced2D::Sprite* cursor = NULL;
 
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
@@ -23,7 +22,7 @@ bool game_preload()
 bool game_init()
 {
 	//g_engine->setMaximizeProcessor(true);
-	p = new ParticleEmitter();
+	p = new Advanced2D::ParticleEmitter();
 
 	if (!p->loadImage(TEXT("particle16.tga")))
 	{
@@ -40,7 +39,7 @@ bool game_init()
 	p->setSpread(270);
 	p->setScale(1.5f);
 	p->setLength(2000.0f);
-	cursor = new Sprite();
+	cursor = new Advanced2D::Sprite();
 
 	if (!cursor->loadImage(TEXT("particle16.tga")))
 	{
@@ -57,6 +56,14 @@ void game_update()
 {
 	//move particles
 	p->update();
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
 }
 
 void game_keyPress(int)

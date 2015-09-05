@@ -2,7 +2,7 @@
 #include "Advanced2D.h"
 #include "Sprite.h"
 
-Advanced2D::Sprite* sprite = NULL;
+static Advanced2D::Sprite* sprite = NULL;
 
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
 
@@ -37,6 +37,14 @@ void game_update()
 	{
 		Advanced2D::Engine::shutdown();
 	}
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
+{
 }
 
 void game_keyPress(int)

@@ -3,8 +3,7 @@
 #include "Audio.h"
 #include <dinput.h>
 
-using namespace Advanced2D;
-Audio::AudioSample* wobble = NULL;
+static Advanced2D::Audio::AudioSample* wobble = NULL;
 
 bool game_preload()
 {
@@ -46,6 +45,14 @@ bool game_init()
 }
 
 void game_update()
+{
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
 {
 }
 

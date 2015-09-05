@@ -1,12 +1,12 @@
 #ifndef __MESH_H_
 #define __MESH_H_
 
-#include <tchar.h>
+#include "Entity.h"
 #include <d3dx9.h>
 
 namespace Advanced2D
 {
-class Mesh
+class Mesh : public Entity
 {
 private:
 	LPD3DXMESH mMesh;
@@ -64,7 +64,8 @@ public:
 
 	void draw();
 	void transform();
-	void update();
+	void move();
+	void animate();
 
 	virtual ~Mesh();
 };

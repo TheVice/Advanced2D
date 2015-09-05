@@ -6,6 +6,7 @@ namespace Advanced2D
 {
 
 Mesh::Mesh(const _TCHAR* aFilePath) :
+	Entity(RENDER3D),
 	mMesh(0),
 	mMaterials(NULL),
 	mD3dxMaterials(0),
@@ -252,11 +253,15 @@ void Mesh::transform()
 	}
 }
 
-void Mesh::update()
+void Mesh::move()
 {
 	mPosition.x += mVelocity.x;
 	mPosition.y += mVelocity.y;
 	mPosition.z += mVelocity.z;
+}
+
+void Mesh::animate()
+{
 }
 
 Mesh::~Mesh()

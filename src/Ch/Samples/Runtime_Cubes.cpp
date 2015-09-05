@@ -3,27 +3,25 @@
 #include "Camera.h"
 #include "Mesh.h"
 
-using namespace Advanced2D;
-
-static Camera* camera = NULL;
-static Mesh* mesh = NULL;
+static Advanced2D::Camera* camera = NULL;
+static Advanced2D::Mesh* mesh = NULL;
 
 bool game_preload()
 {
-	g_engine->setAppTitle(TEXT("CUBE DEMO"));
-	g_engine->setFullScreen(false);
-	g_engine->setScreenWidth(1024);
-	g_engine->setScreenHeight(768);
-	g_engine->setColorDepth(32);
+	Advanced2D::Engine::setAppTitle(TEXT("CUBE DEMO"));
+	Advanced2D::Engine::setFullScreen(false);
+	Advanced2D::Engine::setScreenWidth(1024);
+	Advanced2D::Engine::setScreenHeight(768);
+	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }
 
 bool game_init()
 {
-	mesh = new Mesh(NULL);
+	mesh = new Advanced2D::Mesh(NULL);
 	mesh->createCube(2.0f, 2.0f, 2.0f);
 	//set the camera and perspective
-	camera = new Camera();
+	camera = new Advanced2D::Camera();
 	camera->setPosition(0.0f, 2.0f, 6.0f);
 	camera->setTarget(0.0f, 0.0f, 0.0f);
 	camera->update();
@@ -33,6 +31,14 @@ bool game_init()
 }
 
 void game_update()
+{
+}
+
+void game_entityUpdate(Advanced2D::Entity*)
+{
+}
+
+void game_entityRender(Advanced2D::Entity*)
 {
 }
 
