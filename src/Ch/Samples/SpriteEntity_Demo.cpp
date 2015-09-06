@@ -83,11 +83,11 @@ void game_keyPress(int)
 {
 }
 
-void game_keyRelease(int key)
+void game_keyRelease(int aKey)
 {
-	if (DIK_ESCAPE == key)
+	if (DIK_ESCAPE == aKey)
 	{
-		g_engine->shutdown();
+		Advanced2D::Engine::shutdown();
 	}
 }
 

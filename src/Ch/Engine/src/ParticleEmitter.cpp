@@ -170,10 +170,14 @@ void ParticleEmitter::add()
 	p->setVelocity((cos(dirParticle) + variation) * mVelocity,
 	               (sin(dirParticle) + variation) * mVelocity);
 	//set random color based on ranges
-	unsigned char r = rand() % (mMaxRGB.mX - mMinRGB.mX) + mMinRGB.mX;
-	unsigned char g = rand() % (mMaxRGB.mY - mMinRGB.mY) + mMinRGB.mY;
-	unsigned char b = rand() % (mMaxRGB.mZ - mMinRGB.mZ) + mMinRGB.mZ;
-	unsigned char a = rand() % (mAlphaMax - mAlphaMin) + mAlphaMin;
+	unsigned char r = static_cast<unsigned char>(rand() % (mMaxRGB.mX - mMinRGB.mX)
+	                  + mMinRGB.mX);
+	unsigned char g = static_cast<unsigned char>(rand() % (mMaxRGB.mY - mMinRGB.mY)
+	                  + mMinRGB.mY);
+	unsigned char b = static_cast<unsigned char>(rand() % (mMaxRGB.mZ - mMinRGB.mZ)
+	                  + mMinRGB.mZ);
+	unsigned char a = static_cast<unsigned char>(rand() % (mAlphaMax - mAlphaMin) +
+	                  mAlphaMin);
 	p->setColor(D3DCOLOR_RGBA(r, g, b, a));
 	//set the scale
 	p->setScale(mScale);

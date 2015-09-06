@@ -72,7 +72,7 @@ goto END_BUILD
 set CPP_FILES=
 for %%x in ("%CURRENT_DIR%\src\Ch\Engine\src\*.cpp") do set CPP_FILES=!CPP_FILES! "%%x"
 set CPP_FILES=%CPP_FILES:~1%
-cl /analyze /W4 /c /GS /D "WIN32" /D "_WINDOWS" /D "_LIB" /D "DIRECTINPUT_VERSION=0x0800" %CPP_FILES% /I "%CURRENT_DIR%\src\Ch\Engine\inc"
+cl /analyze /W4 /EHsc /c /GS /D "WIN32" /D "_WINDOWS" /D "_LIB" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" %CPP_FILES% /I "%CURRENT_DIR%\src\Ch\Engine\inc"
 
 set OBJ_FILES=
 for %%x in ("%CURRENT_DIR%\build\MSVC%MSVC_VER%\*.obj") do set OBJ_FILES=!OBJ_FILES! "%%x"
