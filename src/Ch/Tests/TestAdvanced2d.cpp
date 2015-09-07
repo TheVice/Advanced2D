@@ -24,6 +24,10 @@ void game_entityRender(Advanced2D::Entity*)
 {
 }
 
+void game_entityCollision(Advanced2D::Entity*, Advanced2D::Entity*)
+{
+}
+
 void game_keyPress(int)
 {
 }
@@ -164,6 +168,7 @@ TEST(TestAdvanced2D_Static, showFatalMessage)
 #endif
 
 bool gameover = false;
+Advanced2D::Engine* g_engine = NULL;
 
 class TestAdvanced2D : public testing::Test
 {
@@ -218,120 +223,119 @@ private:
 		                           HWND_DESKTOP, NULL, aInstance, NULL);
 		return hwnd;
 	}
-public:
-	Advanced2D::Engine* mEngine;
 protected:
-	TestAdvanced2D() : mEngine(NULL)
+	TestAdvanced2D()
 	{
+		g_engine = NULL;
 	}
 	virtual void SetUp()
 	{
 		Advanced2D::Engine::setFullScreen(false);
 		HWND hwnd = MakeWindow(GetModuleHandle(NULL), 640, 480);
-		mEngine = new Advanced2D::Engine(hwnd);
+		g_engine = new Advanced2D::Engine(hwnd);
 	}
 	virtual void TearDown()
 	{
 		UnregisterClass(CLASS_NAME, GetModuleHandle(NULL));
-		delete mEngine;
+		delete g_engine;
 	}
 	virtual ~TestAdvanced2D()
 	{
-		mEngine = NULL;
+		g_engine = NULL;
 	}
 };
 
 TEST_F(TestAdvanced2D, getWindowHandle)
 {
-	ASSERT_NE(HWND_DESKTOP, mEngine->getWindowHandle());
+	ASSERT_NE(HWND_DESKTOP, g_engine->getWindowHandle());
 }
 
 TEST_F(TestAdvanced2D, getDevice)
 {
-	ASSERT_TRUE(mEngine->getDevice());
+	ASSERT_TRUE(g_engine->getDevice());
 }
 
 TEST_F(TestAdvanced2D, getBackBuffer)
 {
-	ASSERT_TRUE(mEngine->getBackBuffer());
+	ASSERT_TRUE(g_engine->getBackBuffer());
 }
 
 TEST_F(TestAdvanced2D, getSpriteHandler)
 {
-	ASSERT_TRUE(mEngine->getSpriteHandler());
+	ASSERT_TRUE(g_engine->getSpriteHandler());
 }
 
 TEST_F(TestAdvanced2D, isPaused)
 {
-	ASSERT_FALSE(mEngine->isPaused());
+	ASSERT_FALSE(g_engine->isPaused());
 }
 
 TEST_F(TestAdvanced2D, setPaused)
 {
-	ASSERT_FALSE(mEngine->isPaused());
-	mEngine->setPaused(true);
-	ASSERT_TRUE(mEngine->isPaused());
+	ASSERT_FALSE(g_engine->isPaused());
+	g_engine->setPaused(true);
+	ASSERT_TRUE(g_engine->isPaused());
 }
 
 TEST_F(TestAdvanced2D, clearScene)
 {
-	mEngine->clearScene(D3DCOLOR_XRGB(0, 0, 0));
+	g_engine->clearScene(D3DCOLOR_XRGB(0, 0, 0));
 }
 
 TEST_F(TestAdvanced2D, setIdentity)
 {
-	mEngine->setIdentity();
+	g_engine->setIdentity();
 }
 
 TEST_F(TestAdvanced2D, setDefaultMaterial)
 {
-	mEngine->setDefaultMaterial();
+	g_engine->setDefaultMaterial();
 }
 
 TEST_F(TestAdvanced2D, setAmbient)
 {
-	mEngine->setAmbient(D3DCOLOR_RGBA(255, 255, 255, 0));
+	g_engine->setAmbient(D3DCOLOR_RGBA(255, 255, 255, 0));
 }
 
 TEST_F(TestAdvanced2D, renderStart)
 {
-	mEngine->renderStart();
+	g_engine->renderStart();
 }
 
 TEST_F(TestAdvanced2D, renderStop)
 {
-	mEngine->renderStop();
+	g_engine->renderStop();
 }
 
 TEST_F(TestAdvanced2D, getFrameRate_core)
 {
-	ASSERT_EQ(0, mEngine->getFrameRate_core());
+	ASSERT_EQ(0, g_engine->getFrameRate_core());
 }
 
 TEST_F(TestAdvanced2D, getFrameRate_real)
 {
-	ASSERT_EQ(0, mEngine->getFrameRate_real());
+	ASSERT_EQ(0, g_engine->getFrameRate_real());
 }
 
 TEST_F(TestAdvanced2D, getMaximizeProcessor)
 {
-	ASSERT_FALSE(mEngine->getMaximizeProcessor());
+	ASSERT_FALSE(g_engine->getMaximizeProcessor());
 }
 
 TEST_F(TestAdvanced2D, setMaximizeProcessor)
 {
-	ASSERT_FALSE(mEngine->getMaximizeProcessor());
-	mEngine->setMaximizeProcessor(true);
-	ASSERT_TRUE(mEngine->getMaximizeProcessor());
+	ASSERT_FALSE(g_engine->getMaximizeProcessor());
+	g_engine->setMaximizeProcessor(true);
+	ASSERT_TRUE(g_engine->getMaximizeProcessor());
 }
 
 TEST_F(TestAdvanced2D, update)
 {
-	ASSERT_EQ(0, mEngine->getFrameRate_core());
-	ASSERT_EQ(0, mEngine->getFrameRate_real());
-	mEngine->update();
+	ASSERT_EQ(0, g_engine->getFrameRate_core());
+	ASSERT_EQ(0, g_engine->getFrameRate_real());
+	g_engine->update();
 	Sleep(25);
-	mEngine->update();
-	ASSERT_NE(0, mEngine->getFrameRate_core());
-	ASSERT_NE(0, mEngine->getFrameRate_real());
+	g_engine->update();
+	ASSERT_NE(0, g_engine->getFrameRate_core());
+	ASSERT_NE(0, g_engine->getFrameRate_real());
 }

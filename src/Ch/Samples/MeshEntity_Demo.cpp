@@ -59,7 +59,7 @@ void game_update()
 {
 }
 
-void game_entityUpdate(class Advanced2D::Entity* aEntity)
+void game_entityUpdate(Advanced2D::Entity* aEntity)
 {
 	if (aEntity->getRenderType() == Advanced2D::RENDER3D)
 	{
@@ -68,7 +68,11 @@ void game_entityUpdate(class Advanced2D::Entity* aEntity)
 	}
 }
 
-void game_entityRender(class Advanced2D::Entity*)
+void game_entityRender(Advanced2D::Entity*)
+{
+}
+
+void game_entityCollision(Advanced2D::Entity*, Advanced2D::Entity*)
 {
 }
 

@@ -62,6 +62,10 @@ void game_entityRender(Advanced2D::Entity*)
 {
 }
 
+void game_entityCollision(Advanced2D::Entity*, Advanced2D::Entity*)
+{
+}
+
 void game_keyPress(int)
 {
 }

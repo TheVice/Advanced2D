@@ -181,6 +181,10 @@ void game_entityRender(class Advanced2D::Entity*)
 {
 }
 
+void game_entityCollision(Advanced2D::Entity*, Advanced2D::Entity*)
+{
+}
+
 void game_keyPress(int)
 {
 }
@@ -241,7 +245,8 @@ void game_render2d()
 	}
 
 	verdana10->setScale(1.5f);
-	verdana10->print(600, 140, g_engine->getVersionText().c_str(), 0xFF991111);
+	verdana10->print(600, 140, Advanced2D::Engine::getVersionText().c_str(),
+	                 0xFF991111);
 #if _MSC_VER > 1310
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("SCREEN: %f ms"),
 	            1000.0f / g_engine->getFrameRate_real());

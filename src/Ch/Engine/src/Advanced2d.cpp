@@ -2,7 +2,8 @@
 #include "Advanced2D.h"
 #include "Input.h"
 #include "Audio.h"
-#include "Entity.h"
+#include "Sprite.h"
+#include "Rect.h"
 #include <sstream>
 
 namespace Advanced2D
@@ -269,6 +270,132 @@ void Engine::buryEntities()
 	}
 }
 
+bool Engine::collision(Sprite* aSprite1, Sprite* aSprite2)
+{
+	switch (aSprite1->getCollisionMethod())
+	{
+		case COLLISION_RECT:
+			return collisionBR(aSprite1, aSprite2);
+			break;
+
+		case COLLISION_DIST:
+			return collisionD(aSprite1, aSprite2);
+			break;
+
+		case COLLISION_NONE:
+		default:
+			return false;
+	}
+}
+
+bool Engine::collisionBR(Sprite* aSprite1, Sprite* aSprite2)
+{
+	float leftA = aSprite1->getPosition().mX;
+	float topA = aSprite1->getPosition().mY;
+	float rightA = aSprite1->getPosition().mX + aSprite1->getWidth() *
+	               aSprite1->getScale();
+	float bottomA = aSprite1->getPosition().mY + aSprite1->getHeight() *
+	                aSprite1->getScale();
+	float leftB = aSprite2->getPosition().mX;
+	float topB = aSprite2->getPosition().mY;
+	float rightB = aSprite2->getPosition().mX + aSprite2->getWidth() *
+	               aSprite2->getScale();
+	float bottomB = aSprite2->getPosition().mY + aSprite2->getHeight() *
+	                aSprite2->getScale();
+
+	if (Rect<float>::isInside(leftA, topA, rightA, bottomA, leftB, topB))
+	{
+		return true;
+	}
+	else if (Rect<float>::isInside(leftA, topA, rightA, bottomA, rightB, topB))
+	{
+		return true;
+	}
+	else if (Rect<float>::isInside(leftA, topA, rightA, bottomA, leftB, bottomB))
+	{
+		return true;
+	}
+	else if (Rect<float>::isInside(leftA, topA, rightA, bottomA, rightB, bottomB))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Engine::collisionD(Sprite* aSprite1, Sprite* aSprite2)
+{
+	float radius1, radius2;
+
+	if (aSprite1->getWidth() > aSprite1->getHeight())
+	{
+		radius1 = (aSprite1->getWidth() * aSprite1->getScale()) / 2.0f;
+	}
+	else
+	{
+		radius1 = (aSprite1->getHeight() * aSprite1->getScale()) / 2.0f;
+	}
+
+	Vector3<float> vector1(aSprite1->getPosition().mX + radius1,
+	                       aSprite1->getPosition().mY + radius1, 0.0f);
+
+	if (aSprite2->getWidth() > aSprite2->getHeight())
+	{
+		radius2 = (aSprite2->getWidth() * aSprite2->getScale()) / 2.0f;
+	}
+	else
+	{
+		radius2 = (aSprite2->getHeight() * aSprite2->getScale()) / 2.0f;
+	}
+
+	Vector3<float> vector2(aSprite2->getPosition().mX + radius2,
+	                       aSprite2->getPosition().mY + radius2, 0.0f);
+	float dist = vector1.distance2D(vector2);
+	return (dist < radius1 + radius2);
+}
+
+void Engine::testForCollisions2D()
+{
+	for (std::list<Entity*>::iterator first = mEntities.begin();
+	     first != mEntities.end(); ++first)
+	{
+		Sprite* spr1 = static_cast<Sprite*>((*first));
+
+		if (spr1->getRenderType() != RENDER2D)
+		{
+			continue;
+		}
+
+		if (false == spr1->isAlive() || false == spr1->isVisible() ||
+		    false == spr1->isCollidable())
+		{
+			continue;
+		}
+
+		for (std::list<Entity*>::iterator second = mEntities.begin();
+		     second != mEntities.end(); ++second)
+		{
+			Sprite* spr2 = static_cast<Sprite*>((*second));
+
+			if (spr1 == spr2 || spr2->getRenderType() != RENDER2D)
+			{
+				continue;
+			}
+
+			if (false == spr2->isAlive() || false == spr2->isVisible() ||
+			    false == spr2->isCollidable())
+			{
+				continue;
+			}
+
+			if (collision(spr1, spr2))
+			{
+				game_entityCollision(spr1, spr2);
+			}
+		}
+	}
+}
+
 Engine::Engine(HWND aWindowHandle) :
 	mWindowHandle(aWindowHandle),
 	mDirect3d(NULL),
@@ -285,7 +412,9 @@ Engine::Engine(HWND aWindowHandle) :
 	mFrameCountReal(0),
 	mFrameRateReal(0),
 	mInput(NULL),
-	mAudio(NULL)
+	mAudio(NULL),
+	mEntities(),
+	mCollisionTimer()
 {
 	mDirect3d = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -533,6 +662,12 @@ void Engine::update()
 	if (!mPause)
 	{
 		updateEntities();
+
+		//perfome global collision testing at 20 Hz
+		if (mCollisionTimer.stopwatch(50))
+		{
+			testForCollisions2D();
+		}
 	}
 
 	//update with 60fps timing
@@ -591,11 +726,6 @@ void Engine::update()
 std::list<Entity*>* Engine::getEntityList()
 {
 	return &mEntities;
-}
-
-int Engine::getEntityCount()
-{
-	return mEntities.size();
 }
 
 void Engine::addEntity(Entity* aEntity)

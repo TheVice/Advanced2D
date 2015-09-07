@@ -158,8 +158,15 @@ if(DEFINED GTEST_ROOT)
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Entity.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Input.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Input.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Sprite.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Sprite.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Texture.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Texture.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.inl
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Vector3.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Tests/TestAdvanced2d.cpp
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)
@@ -193,6 +200,9 @@ if(DEFINED GTEST_ROOT)
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Texture.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Timer.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Timer.cpp
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.h
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.inl
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Vector3.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Tests/TestParticleEmitter.cpp
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)
@@ -231,6 +241,7 @@ if(DEFINED GTEST_ROOT)
     #TestVector3
     set(SRC_FILES ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.h
                   ${CMAKE_SOURCE_DIR}/Ch/Engine/inc/Vector3.inl
+                  ${CMAKE_SOURCE_DIR}/Ch/Engine/src/Vector3.cpp
                   ${CMAKE_SOURCE_DIR}/Ch/Tests/TestVector3.cpp
                   ${GTEST_LIBRARY}/src/gtest-all.cc
                   ${GTEST_LIBRARY}/src/gtest_main.cc)

@@ -57,7 +57,7 @@ bool game_init()
 	_TCHAR szText[32 * sizeof(_TCHAR)];
 #if _MSC_VER > 1310
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("Entities: %i"),
-	            g_engine->getEntityCount());
+	            static_cast<int>(g_engine->getEntityList()->size()));
 #else
 	_stprintf(szText, TEXT("Entities: %i"), g_engine->getEntityCount());
 #endif
@@ -76,6 +76,10 @@ void game_entityUpdate(Advanced2D::Entity*) //aEntity)
 }
 
 void game_entityRender(Advanced2D::Entity*)
+{
+}
+
+void game_entityCollision(Advanced2D::Entity*, Advanced2D::Entity*)
 {
 }
 

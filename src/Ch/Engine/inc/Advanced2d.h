@@ -16,6 +16,7 @@ namespace Advanced2D
 class Input;
 class Audio;
 class Entity;
+class Sprite;
 class Engine
 {
 private:
@@ -65,6 +66,13 @@ private:
 	void buryEntities();
 
 	std::list<Entity*> mEntities;
+
+	Timer mCollisionTimer;
+
+	bool collision(Sprite* aSprite1, Sprite* aSprite2);
+	bool collisionBR(Sprite* aSprite1, Sprite* aSprite2);
+	bool collisionD(Sprite* aSprite1, Sprite* aSprite2);
+	void testForCollisions2D();
 
 	Engine();
 	Engine(const Engine& aRhs);
@@ -129,7 +137,6 @@ public:
 	void update();
 
 	std::list<Entity*>* getEntityList();
-	int getEntityCount();
 	void addEntity(Entity* aEntity);
 	Entity* findEntity(const _TCHAR* aEntityName);
 	Entity* findEntity(int aEntityType);
@@ -144,6 +151,7 @@ extern bool game_init();
 extern void game_update();
 extern void game_entityUpdate(Advanced2D::Entity*);
 extern void game_entityRender(Advanced2D::Entity*);
+extern void game_entityCollision(Advanced2D::Entity*, Advanced2D::Entity*);
 extern void game_keyPress(int);
 extern void game_keyRelease(int);
 extern void game_mouseButton(int);

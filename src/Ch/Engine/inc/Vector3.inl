@@ -57,15 +57,6 @@ void Vector3<T>::operator /= (const Vector3<T>& aVector3)
 }
 
 template<class T>
-bool Vector3<T>::operator == (const Vector3<T>& aVector3) const
-{
-	return (
-	           ((aVector3.mX - 0.0001) < mX) && (mX < (0.0001 + aVector3.mX)) &&
-	           ((aVector3.mY - 0.0001) < mY) && (mY < (0.0001 + aVector3.mY)) &&
-	           ((aVector3.mZ - 0.0001) < mZ) && (mZ < (0.0001 + aVector3.mZ)) );
-}
-
-template<class T>
 bool Vector3<T>::operator != (const Vector3<T>& aVector3) const
 {
 	return (!(*this == aVector3));
