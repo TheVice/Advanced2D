@@ -36,7 +36,7 @@ T Mathematic<T>::wrapAngleRadians(T aRadians)
 template<class T>
 T Mathematic<T>::wrapAngleDegrees(T aDegrees)
 {
-	T result = fmod(degs, 360.0);
+	T result = fmod(aDegrees, 360.0);
 
 	if (result < 0)
 	{

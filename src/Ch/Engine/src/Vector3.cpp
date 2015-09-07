@@ -5,6 +5,7 @@
 namespace Advanced2D
 {
 
+template<>
 bool Vector3<bool>::operator == (const Vector3<bool>& aVector3) const
 {
 	return ((aVector3.mX == mX) &&
@@ -12,6 +13,7 @@ bool Vector3<bool>::operator == (const Vector3<bool>& aVector3) const
 	        (aVector3.mZ == mZ));
 }
 
+template<>
 bool Vector3<char>::operator == (const Vector3<char>& aVector3) const
 {
 	return ((aVector3.mX == mX) &&
@@ -19,6 +21,7 @@ bool Vector3<char>::operator == (const Vector3<char>& aVector3) const
 	        (aVector3.mZ == mZ));
 }
 
+template<>
 bool Vector3<int>::operator == (const Vector3<int>& aVector3) const
 {
 	return ((aVector3.mX == mX) &&
@@ -26,6 +29,7 @@ bool Vector3<int>::operator == (const Vector3<int>& aVector3) const
 	        (aVector3.mZ == mZ));
 }
 
+template<>
 bool Vector3<long>::operator == (const Vector3<long>& aVector3) const
 {
 	return ((aVector3.mX == mX) &&
@@ -33,6 +37,7 @@ bool Vector3<long>::operator == (const Vector3<long>& aVector3) const
 	        (aVector3.mZ == mZ));
 }
 
+template<>
 bool Vector3<float>::operator == (const Vector3<float>& aVector3) const
 {
 	return (
@@ -44,6 +49,7 @@ bool Vector3<float>::operator == (const Vector3<float>& aVector3) const
 	           (mZ < (50 * FLT_EPSILON + aVector3.mZ)) );
 }
 
+template<>
 bool Vector3<double>::operator == (const Vector3<double>& aVector3) const
 {
 	return (

@@ -2,16 +2,18 @@
 #include "Advanced2D.h"
 #include "Sprite.h"
 
-static Advanced2D::Sprite* sprite = NULL;
+#define SCREENW 640
+#define SCREENH 480
+#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
-#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
+static Advanced2D::Sprite* sprite = NULL;
 
 bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("SPRITE COLOR KEY DEMO"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(640);
-	Advanced2D::Engine::setScreenHeight(480);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }
@@ -77,8 +79,8 @@ void game_mouseWheel(int)
 
 void game_render2d()
 {
-	float cx = static_cast<float>(g_engine->getScreenWidth()) / 2;
-	float cy = static_cast<float>(g_engine->getScreenHeight()) / 2;
+	float cx = static_cast<float>(Advanced2D::Engine::getScreenWidth()) / 2;
+	float cy = static_cast<float>(Advanced2D::Engine::getScreenHeight()) / 2;
 	float sx = static_cast<float>(sprite->getWidth()) / 2;
 	float sy = static_cast<float>(sprite->getHeight()) / 2;
 	sprite->setPosition2d(cx - sx, cy - sy);

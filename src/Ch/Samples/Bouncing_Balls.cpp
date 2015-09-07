@@ -4,6 +4,8 @@
 #include "Mesh.h"
 #include <vector>
 
+#define SCREENW 1024
+#define SCREENH 768
 #define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
 static Advanced2D::Camera* camera = NULL;
@@ -17,8 +19,8 @@ bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("BOUNCING BALLS"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(1024);
-	Advanced2D::Engine::setScreenHeight(768);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }

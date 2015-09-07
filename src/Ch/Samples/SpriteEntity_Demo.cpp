@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <dinput.h>
 
+#define SCREENW 1024
+#define SCREENH 768
 #define OBJECT_SPRITE 100
 #define MAX_PR 1000
 
@@ -14,8 +16,8 @@ bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("Sprite Entity Demo"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(1024);
-	Advanced2D::Engine::setScreenHeight(768);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }

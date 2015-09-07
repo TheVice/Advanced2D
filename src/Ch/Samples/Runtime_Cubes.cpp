@@ -3,6 +3,9 @@
 #include "Camera.h"
 #include "Mesh.h"
 
+#define SCREENW 1024
+#define SCREENH 768
+
 static Advanced2D::Camera* camera = NULL;
 static Advanced2D::Mesh* mesh = NULL;
 
@@ -10,8 +13,8 @@ bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("CUBE DEMO"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(1024);
-	Advanced2D::Engine::setScreenHeight(768);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }

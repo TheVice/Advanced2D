@@ -2,16 +2,18 @@
 #include "Advanced2D.h"
 #include "Sprite.h"
 
-Advanced2D::Sprite* sprite = NULL;
+#define SCREENW 800
+#define SCREENH 600
+#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
-#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
+static Advanced2D::Sprite* sprite = NULL;
 
 bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("SPRITE ANIMATION DEMO"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(800);
-	Advanced2D::Engine::setScreenHeight(600);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }
@@ -41,9 +43,10 @@ void game_update()
 
 	if (sprite->getCurrentFrame() == sprite->getTotalFrames() - 1)
 	{
-		sprite->setPosition2d(static_cast<float>(rand() % g_engine->getScreenWidth() -
+		sprite->setPosition2d(static_cast<float>(rand() %
+		                      Advanced2D::Engine::getScreenWidth() -
 		                      128),
-		                      static_cast<float>(rand() % (g_engine->getScreenHeight() - 128)));
+		                      static_cast<float>(rand() % (Advanced2D::Engine::getScreenHeight() - 128)));
 	}
 
 	if (KEY_DOWN(VK_ESCAPE))

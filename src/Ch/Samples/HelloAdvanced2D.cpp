@@ -3,9 +3,9 @@
 
 bool game_preload()
 {
-	Advanced2D::Engine::setAppTitle(TEXT("Ch1_HelloAdvanced2D"));
-	g_engine->showMessage(Advanced2D::Engine::getVersionText().c_str(),
-	                      TEXT("TEXT ENGINE"));
+	Advanced2D::Engine::setAppTitle(TEXT("HelloAdvanced2D"));
+	Advanced2D::Engine::showMessage(Advanced2D::Engine::getVersionText().c_str(),
+	                                TEXT("TEXT ENGINE"));
 	return true;
 }
 

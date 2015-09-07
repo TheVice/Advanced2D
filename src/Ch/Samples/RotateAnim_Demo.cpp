@@ -2,16 +2,18 @@
 #include "Advanced2D.h"
 #include "Sprite.h"
 
-static Advanced2D::Sprite* sprite = NULL;
+#define SCREENW 800
+#define SCREENH 600
+#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
 
-#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000)?1:0)
+static Advanced2D::Sprite* sprite = NULL;
 
 bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("SPRITE ANIMATE/ROTATE/SCALING DEMO"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(800);
-	Advanced2D::Engine::setScreenHeight(600);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }

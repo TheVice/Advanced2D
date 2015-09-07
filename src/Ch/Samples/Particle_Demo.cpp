@@ -3,20 +3,22 @@
 #include "Sprite.h"
 #include "ParticleEmitter.h"
 
+#define SCREENW 1024
+#define SCREENH 768
+#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
+
 static Advanced2D::ParticleEmitter* pa = NULL;
 static Advanced2D::ParticleEmitter* pb = NULL;
 static Advanced2D::ParticleEmitter* pc = NULL;
 static Advanced2D::ParticleEmitter* pd = NULL;
 static Advanced2D::ParticleEmitter* pe = NULL;
 
-#define KEY_DOWN(vk) ((GetAsyncKeyState(vk) & 0x8000) ? 1 : 0)
-
 bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("PARTICLE DEMO"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(1024);
-	Advanced2D::Engine::setScreenHeight(768);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }

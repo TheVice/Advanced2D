@@ -53,7 +53,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	for (double degrees = -10 * 180, step = 15, maxDegrees = 10 * 180;
 	     degrees < maxDegrees; degrees += step)
 	{
-		double wrap = Advanced2D::Mathematic<double>::wrapAngleRadians(degrees);
+		double wrap = Advanced2D::Mathematic<double>::wrapAngleDegrees(degrees);
 		_tprintf(_TEXT("%g input - %g after wrap\n"), degrees, wrap);
 	}
 

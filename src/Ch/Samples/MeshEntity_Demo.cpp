@@ -5,7 +5,10 @@
 #include "Mesh.h"
 #include <dinput.h>
 
+#define SCREENW 1024
+#define SCREENH 768
 #define MAX_PR 10
+
 static Advanced2D::Camera* camera = NULL;
 static Advanced2D::Light* light = NULL;
 
@@ -13,8 +16,8 @@ bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("Mesh Entity Demo"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(1024);
-	Advanced2D::Engine::setScreenHeight(768);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }

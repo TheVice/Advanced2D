@@ -116,8 +116,8 @@ bool game_init()
 	}
 	catch (const std::exception&)
 	{
-		g_engine->showFatalMessage(TEXT("Unable to load highlight.tga image"),
-		                           TEXT("game_init"));
+		Advanced2D::Engine::showFatalMessage(TEXT("Unable to load highlight.tga image"),
+		                                     TEXT("game_init"));
 		return false;
 	}
 
@@ -128,7 +128,7 @@ void updateConsole()
 {
 	_TCHAR szText[64 * sizeof(_TCHAR)];
 	int y = 0;
-	console->print(g_engine->getVersionText().c_str(), y++);
+	console->print(Advanced2D::Engine::getVersionText().c_str(), y++);
 	y++;
 #if _MSC_VER > 1310
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText),
@@ -165,9 +165,9 @@ void updateConsole()
 	y++;
 #if _MSC_VER > 1310
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("Screen: %i"),
-	            g_engine->getColorDepth());
+	            Advanced2D::Engine::getColorDepth());
 #else
-	_stprintf(szText, TEXT("Screen: %i"), g_engine->getColorDepth());
+	_stprintf(szText, TEXT("Screen: %i"), Advanced2D::Engine::getColorDepth());
 #endif
 	console->print(szText, y++);
 	y++;

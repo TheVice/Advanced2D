@@ -136,9 +136,9 @@ void updateConsole()
 	y++;
 #if _MSC_VER > 1310
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("Screen: %i"),
-	            g_engine->getColorDepth());
+	            Advanced2D::Engine::getColorDepth());
 #else
-	_stprintf(szText, TEXT("Screen: %i"), g_engine->getColorDepth());
+	_stprintf(szText, TEXT("Screen: %i"), Advanced2D::Engine::getColorDepth());
 #endif
 	console->print(szText, y++);
 	y++;

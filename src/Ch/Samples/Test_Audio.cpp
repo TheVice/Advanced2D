@@ -3,14 +3,17 @@
 #include "Audio.h"
 #include <dinput.h>
 
+#define SCREENW 640
+#define SCREENH 480
+
 static Advanced2D::Audio::AudioSample* wobble = NULL;
 
 bool game_preload()
 {
 	Advanced2D::Engine::setAppTitle(TEXT("AUDIO TEST"));
 	Advanced2D::Engine::setFullScreen(false);
-	Advanced2D::Engine::setScreenWidth(640);
-	Advanced2D::Engine::setScreenHeight(480);
+	Advanced2D::Engine::setScreenWidth(SCREENW);
+	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
 }

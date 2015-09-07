@@ -66,7 +66,7 @@ void Console::draw()
 				break;
 			}
 
-			x = static_cast<size_t>(g_engine->getScreenWidth() / 2 + 5);
+			x = static_cast<size_t>(Advanced2D::Engine::getScreenWidth() / 2 + 5);
 			y = 0;
 		}
 	}
