@@ -148,12 +148,12 @@ protected:
 	}
 };
 
-TEST_F(TestParticleEmitter, setPosition2D)
+TEST_F(TestParticleEmitter, setPosition2d)
 {
-	mParticleEmitter->setPosition2D(Advanced2D::Vector3<float>(1.0f, 2.0f, 0.0f));
+	mParticleEmitter->setPosition2d(Advanced2D::Vector3<float>(1.0f, 2.0f, 0.0f));
 	ASSERT_EQ(Advanced2D::Vector3<float>(1.0f, 2.0f, 0.0f),
 	          mParticleEmitter->getPosition());
-	mParticleEmitter->setPosition2D(3.0f, 4.0f);
+	mParticleEmitter->setPosition2d(3.0f, 4.0f);
 	ASSERT_EQ(Advanced2D::Vector3<float>(3.0f, 4.0f, 0.0f),
 	          mParticleEmitter->getPosition());
 }

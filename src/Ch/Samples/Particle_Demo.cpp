@@ -34,7 +34,7 @@ bool game_init()
 		return false;
 	}
 
-	pa->setPosition2D(100.0f, 300.0f);
+	pa->setPosition2d(100.0f, 300.0f);
 	pa->setDirection(0.0f);
 	pa->setMax(500);
 	pa->setAlphaRange(100, 255);
@@ -51,7 +51,7 @@ bool game_init()
 		return false;
 	}
 
-	pb->setPosition2D(300.0f, 100.0f);
+	pb->setPosition2d(300.0f, 100.0f);
 	pb->setDirection(180.0f);
 	pb->setScale(0.6f);
 	pb->setMax(500);
@@ -70,7 +70,7 @@ bool game_init()
 		return false;
 	}
 
-	pc->setPosition2D(250.0f, 525.0f);
+	pc->setPosition2d(250.0f, 525.0f);
 	pc->setDirection(0.0f);
 	pc->setScale(0.5f);
 	pc->setMax(2000);
@@ -89,7 +89,7 @@ bool game_init()
 		return false;
 	}
 
-	pd->setPosition2D(750.0f, 650.0f);
+	pd->setPosition2d(750.0f, 650.0f);
 	pd->setDirection(0.0f);
 	pd->setScale(0.75f);
 	pd->setMax(10);
@@ -108,7 +108,7 @@ bool game_init()
 		return false;
 	}
 
-	pe->setPosition2D(730.0f, 575.0f);
+	pe->setPosition2d(730.0f, 575.0f);
 	pe->setDirection(0.0f);
 	pe->setScale(4.0f);
 	pe->setMax(1000);
@@ -141,10 +141,10 @@ void game_update()
 
 	float x = 750 + cos(angle) * radius;
 	float y = 500 + sin(angle) * radius;
-	pd->setPosition2D(x, y);
+	pd->setPosition2d(x, y);
 	pd->update();
 	//update smoke emitter
-	pe->setPosition2D(x, y);
+	pe->setPosition2d(x, y);
 	pe->update();
 
 	if (KEY_DOWN(VK_ESCAPE))

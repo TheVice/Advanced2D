@@ -19,7 +19,7 @@ public:
 	bool operator == (const Vector3<T>& aVector3) const;
 	bool operator != (const Vector3<T>& aVector3) const;
 	Vector3<T>& operator = (const Vector3<T>& aVector3);
-	T distance2D(const Vector3<T>& aVector3);
+	T distance2d(const Vector3<T>& aVector3);
 	T length() const;
 	T dotProduct(const Vector3<T>& aVector3);
 	Vector3<T> crossProduct(const Vector3<T>& aVector3) const;

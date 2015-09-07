@@ -65,8 +65,8 @@ public:
 
 	//screen position
 	Vector3<float>& getPosition();
-	void setPosition2D(const Vector3<float>& aPosition2D);
-	void setPosition2D(float aPositionX, float aPositionY);
+	void setPosition2d(const Vector3<float>& aPosition2D);
+	void setPosition2d(float aPositionX, float aPositionY);
 
 	//movement velocity
 	Vector3<float>& getVelocity();

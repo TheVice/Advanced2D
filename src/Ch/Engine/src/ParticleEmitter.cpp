@@ -25,13 +25,13 @@ ParticleEmitter::ParticleEmitter() :
 {
 }
 
-void ParticleEmitter::setPosition2D(float aX, float aY)
+void ParticleEmitter::setPosition2d(float aX, float aY)
 {
 	mPosition.mX = aX;
 	mPosition.mY = aY;
 }
 
-void ParticleEmitter::setPosition2D(const Vector3<float>& aPosition2D)
+void ParticleEmitter::setPosition2d(const Vector3<float>& aPosition2D)
 {
 	mPosition = aPosition2D;
 }
@@ -148,9 +148,9 @@ void ParticleEmitter::update()
 		(*i)->move();
 
 		//is particle beyond the emitter's range?
-		if ((*i)->getPosition().distance2D(mPosition) > mLength)
+		if ((*i)->getPosition().distance2d(mPosition) > mLength)
 		{
-			(*i)->setPosition2D(mPosition);
+			(*i)->setPosition2d(mPosition);
 		}
 	}
 }
@@ -161,7 +161,7 @@ void ParticleEmitter::add()
 	//create a new particle
 	Sprite* p = new Sprite();
 	p->setImage(mImage);
-	p->setPosition2D(mPosition);
+	p->setPosition2d(mPosition);
 	//add some randomness to the spread
 	float variation = (static_cast<float>(rand() % mSpread) - static_cast<float>
 	                   (mSpread) / 2.0f) / 100.0f;

@@ -32,7 +32,7 @@ bool game_init()
 		return false;
 	}
 
-	p->setPosition2D(100.0f, 300.0f);
+	p->setPosition2d(100.0f, 300.0f);
 	p->setDirection(0.0f);
 	p->setMax(0);
 	p->setAlphaRange(50, 200);
@@ -101,8 +101,8 @@ void game_mouseMove(int aX, int aY)
 {
 	float fx = static_cast<float>(aX);
 	float fy = static_cast<float>(aY);
-	cursor->setPosition2D(fx, fy);
-	p->setPosition2D(fx, fy);
+	cursor->setPosition2d(fx, fy);
+	p->setPosition2d(fx, fy);
 }
 
 void game_mouseWheel(int)

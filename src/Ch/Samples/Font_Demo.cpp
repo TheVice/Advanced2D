@@ -61,7 +61,7 @@ bool game_init()
 		asteroid->setTotalFrames(64);
 		asteroid->setColumns(8);
 		asteroid->setSize(60, 60);
-		asteroid->setPosition2D(static_cast<float>(rand() % SCREENW),
+		asteroid->setPosition2d(static_cast<float>(rand() % SCREENW),
 		                        static_cast<float>(rand() % SCREENH));
 		asteroid->setFrameTimer(rand() % 100);
 		asteroid->setCurrentFrame(rand() % 64);

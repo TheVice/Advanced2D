@@ -118,12 +118,12 @@ Vector3<float>& Sprite::getPosition()
 	return mPosition;
 }
 
-void Sprite::setPosition2D(const Vector3<float>& aPosition2D)
+void Sprite::setPosition2d(const Vector3<float>& aPosition2D)
 {
 	mPosition = aPosition2D;
 }
 
-void Sprite::setPosition2D(float aPositionX, float aPositionY)
+void Sprite::setPosition2d(float aPositionX, float aPositionY)
 {
 	mPosition.mX = aPositionX;
 	mPosition.mY = aPositionY;

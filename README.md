@@ -26,8 +26,10 @@ Addition information can be found at [Game Development Forum » Book Support Are
 * To ```set``` addition ```INCLUDE``` and ```LIB``` directories before call ```msvc.cmd``` set it via console, for example
   * ```set INCLUDE=%INCLUDE%;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include```
   * ```set INCLUDE=%INCLUDE%;C:\Program Files\Microsoft DirectX SDK (June 2010)\Include```
+  * ```set INCLUDE=%INCLUDE%;C:\fmodapi375win\api\inc```
   * ```set LIB=%LIB%;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib```
   * ```set LIB=%LIB%;C:\Program Files\Microsoft DirectX SDK (June 2010)\Lib\x86```
+  * ```set LIB=%LIB%;C:\fmodapi375win\api\lib```
 * Version 2005/2008 have global directory setting so it also possible to set that value via IDE
 
 ###Building by other versions of Visual Studio

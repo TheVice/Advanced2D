@@ -350,7 +350,7 @@ bool Engine::collisionD(Sprite* aSprite1, Sprite* aSprite2)
 
 	Vector3<float> vector2(aSprite2->getPosition().mX + radius2,
 	                       aSprite2->getPosition().mY + radius2, 0.0f);
-	float dist = vector1.distance2D(vector2);
+	float dist = vector1.distance2d(vector2);
 	return (dist < radius1 + radius2);
 }
 

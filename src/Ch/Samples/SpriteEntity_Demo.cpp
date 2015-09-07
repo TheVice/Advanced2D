@@ -41,7 +41,7 @@ bool game_init()
 		asteroid->setTotalFrames(64);
 		asteroid->setColumns(8);
 		asteroid->setSize(60, 60);
-		asteroid->setPosition2D(static_cast<float>(rand() % 950),
+		asteroid->setPosition2d(static_cast<float>(rand() % 950),
 		                        static_cast<float>(rand() % 700));
 		asteroid->setFrameTimer(rand() % 100);
 		asteroid->setCurrentFrame(rand() % 64);
@@ -59,7 +59,8 @@ bool game_init()
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("Entities: %i"),
 	            static_cast<int>(g_engine->getEntityList()->size()));
 #else
-	_stprintf(szText, TEXT("Entities: %i"), g_engine->getEntityCount());
+	_stprintf(szText, TEXT("Entities: %i"),
+	          static_cast<int>(g_engine->getEntityList()->size()));
 #endif
 	Advanced2D::Engine::showMessage(szText);
 	return true;

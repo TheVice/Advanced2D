@@ -33,8 +33,8 @@ private:
 public:
 	ParticleEmitter();
 
-	void setPosition2D(float aX, float aY);
-	void setPosition2D(const Vector3<float>& aPosition2D);
+	void setPosition2d(float aX, float aY);
+	void setPosition2d(const Vector3<float>& aPosition2D);
 	Vector3<float>& getPosition();
 	void setDirection(float aDirection);
 	float getDirection();

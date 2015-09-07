@@ -81,7 +81,7 @@ void game_render2d()
 	float cy = static_cast<float>(g_engine->getScreenHeight()) / 2;
 	float sx = static_cast<float>(sprite->getWidth()) / 2;
 	float sy = static_cast<float>(sprite->getHeight()) / 2;
-	sprite->setPosition2D(cx - sx, cy - sy);
+	sprite->setPosition2d(cx - sx, cy - sy);
 	sprite->draw();
 }
 

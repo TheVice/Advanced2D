@@ -72,7 +72,7 @@ Vector3<T>& Vector3<T>::operator = (const Vector3<T>& aVector3)
 }
 
 template<class T>
-T Vector3<T>::distance2D(const Vector3<T>& aVector3)
+T Vector3<T>::distance2d(const Vector3<T>& aVector3)
 {
 	return sqrt(pow((aVector3.mX - mX), 2) + pow((aVector3.mY - mY), 2));
 }

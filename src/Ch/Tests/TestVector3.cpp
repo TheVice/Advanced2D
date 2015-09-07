@@ -130,7 +130,7 @@ TEST_F(TestVector3Char, appropriation)
 {
 }
 
-TEST_F(TestVector3Char, distance2D)
+TEST_F(TestVector3Char, distance2d)
 {
 }
 
@@ -226,7 +226,7 @@ TEST_F(TestVector3Int, appropriation)
 {
 }
 
-TEST_F(TestVector3Int, distance2D)
+TEST_F(TestVector3Int, distance2d)
 {
 }
 
@@ -322,7 +322,7 @@ TEST_F(TestVector3Long, appropriation)
 {
 }
 
-TEST_F(TestVector3Long, distance2D)
+TEST_F(TestVector3Long, distance2d)
 {
 }
 
@@ -487,7 +487,7 @@ TEST_F(TestVector3Float, appropriation)
 	ASSERT_TRUE((*mVector1) == (*mVector2));
 }
 
-TEST_F(TestVector3Float, distance2D)
+TEST_F(TestVector3Float, distance2d)
 {
 	mVector1->mX = 1.0f;
 	mVector1->mY = 1.0f;
@@ -497,10 +497,10 @@ TEST_F(TestVector3Float, distance2D)
 	mVector2->mY = 2.0f;
 	mVector2->mZ = 0.0f;
 	//
-	ASSERT_FLOAT_EQ(sqrt(2.0f), mVector1->distance2D(*mVector2));
-	ASSERT_FLOAT_EQ(sqrt(2.0f), mVector2->distance2D(*mVector1));
-	ASSERT_FLOAT_EQ(0, mVector1->distance2D(*mVector1));
-	ASSERT_FLOAT_EQ(0, mVector2->distance2D(*mVector2));
+	ASSERT_FLOAT_EQ(sqrt(2.0f), mVector1->distance2d(*mVector2));
+	ASSERT_FLOAT_EQ(sqrt(2.0f), mVector2->distance2d(*mVector1));
+	ASSERT_FLOAT_EQ(0, mVector1->distance2d(*mVector1));
+	ASSERT_FLOAT_EQ(0, mVector2->distance2d(*mVector2));
 }
 
 TEST_F(TestVector3Float, length)
@@ -706,7 +706,7 @@ TEST_F(TestVector3Double, appropriation)
 	ASSERT_TRUE((*mVector1) == (*mVector2));
 }
 
-TEST_F(TestVector3Double, distance2D)
+TEST_F(TestVector3Double, distance2d)
 {
 	mVector1->mX = 1.0;
 	mVector1->mY = 1.0;
@@ -716,10 +716,10 @@ TEST_F(TestVector3Double, distance2D)
 	mVector2->mY = 2.0;
 	mVector2->mZ = 0.0;
 	//
-	ASSERT_DOUBLE_EQ(sqrt(2.0), mVector1->distance2D(*mVector2));
-	ASSERT_DOUBLE_EQ(sqrt(2.0), mVector2->distance2D(*mVector1));
-	ASSERT_DOUBLE_EQ(0, mVector1->distance2D(*mVector1));
-	ASSERT_DOUBLE_EQ(0, mVector2->distance2D(*mVector2));
+	ASSERT_DOUBLE_EQ(sqrt(2.0), mVector1->distance2d(*mVector2));
+	ASSERT_DOUBLE_EQ(sqrt(2.0), mVector2->distance2d(*mVector1));
+	ASSERT_DOUBLE_EQ(0, mVector1->distance2d(*mVector1));
+	ASSERT_DOUBLE_EQ(0, mVector2->distance2d(*mVector2));
 }
 
 TEST_F(TestVector3Double, length)

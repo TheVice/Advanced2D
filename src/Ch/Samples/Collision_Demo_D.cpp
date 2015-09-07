@@ -64,7 +64,7 @@ bool game_init()
 		sprite->setImage(ball_image);
 		sprite->setSize(128, 128);
 		sprite->setScale(static_cast<float>((rand() % SCALE + SCALE / 4) / 100.0f));
-		sprite->setPosition2D(static_cast<float>(rand() % SCREENW),
+		sprite->setPosition2d(static_cast<float>(rand() % SCREENW),
 		                      static_cast<float>(rand() % SCREENH));
 		sprite->setCollisionMethod(Advanced2D::COLLISION_DIST);
 		sprite->setVelocity(static_cast<float>((rand() % 30 - 15) / 10.0f),
@@ -146,7 +146,8 @@ void updateConsole()
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("Entities: %i"),
 	            static_cast<int>(g_engine->getEntityList()->size()));
 #else
-	_stprintf(szText, TEXT("Entities: %i"), g_engine->getEntityCount());
+	_stprintf(szText, TEXT("Entities: %i"),
+	          static_cast<int>(g_engine->getEntityList()->size()));
 #endif
 	console->print(szText, y++);
 #if _MSC_VER > 1310

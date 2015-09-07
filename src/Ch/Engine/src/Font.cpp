@@ -51,7 +51,7 @@ void Font::print(float aX, float aY, const _TCHAR* aText, int aColor)
 	{
 		int frame = static_cast<int>(aText[n]);
 		setCurrentFrame(frame);
-		setPosition2D(fx, aY);
+		setPosition2d(fx, aY);
 		draw();
 
 		if (!mWidths[frame])

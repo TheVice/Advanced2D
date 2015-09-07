@@ -37,7 +37,7 @@ bool game_init()
 void game_update()
 {
 	static float scale = 0.005f;
-	sprite->setPosition2D(400, 300);
+	sprite->setPosition2d(400, 300);
 	sprite->setRotation(Advanced2D::Timer::getTimer() / 600.0f);
 	float s = sprite->getScale() + scale;
 

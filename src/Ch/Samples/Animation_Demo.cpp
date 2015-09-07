@@ -41,7 +41,7 @@ void game_update()
 
 	if (sprite->getCurrentFrame() == sprite->getTotalFrames() - 1)
 	{
-		sprite->setPosition2D(static_cast<float>(rand() % g_engine->getScreenWidth() -
+		sprite->setPosition2d(static_cast<float>(rand() % g_engine->getScreenWidth() -
 		                      128),
 		                      static_cast<float>(rand() % (g_engine->getScreenHeight() - 128)));
 	}

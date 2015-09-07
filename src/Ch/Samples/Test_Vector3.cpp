@@ -22,7 +22,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	_tprintf(_TEXT("A = %f, %f, %f\n"), A.mX, A.mY, A.mZ);
 	Advanced2D::Vector3<float> B(90.0f, 80.0f, 1.0f);
 	_tprintf(_TEXT("B = %f, %f, %f\n"), B.mX, B.mY, B.mZ);
-	_tprintf(_TEXT("Distance A to B: %f\n"), A.distance2D(B));
+	_tprintf(_TEXT("Distance A to B: %f\n"), A.distance2d(B));
 	_tprintf(_TEXT("Length of A: %f\n"), A.length());
 	_tprintf(_TEXT("Length of B: %f\n"), B.length());
 	A.move(5.0f, 0.0f, 0.0f);
