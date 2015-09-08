@@ -34,3 +34,11 @@ Addition information can be found at [Game Development Forum » Book Support Are
 
 ###Building by other versions of Visual Studio
 * If ```msvc.cmd``` script do not determine version of Visual Studio, for example you have Microsoft Visual C++ Toolkit 2003, ```cmake``` do not apply - instead ```cl``` try to build project directly
+
+###Building by Eclipse
+* Open ```Command Prompt``` and enter into project directory
+* Make sure that path to ```cmake``` bin directory in your PATH variable (```set PATH=%PATH%;"%ProgramFiles(x86)%\cmake-2.8.12.2-win32-x86\bin"``` if you have cmake version 2.8.12.2 at Program Files (x86) on 64 bit version of Windows)
+* Make sure that path to MinGW bin directory in your PATH variable 
+* Create build sub folder (```mkdir build```) and enter to it (```cd build```)
+* Type and execute: ```cmake" ..\src -G "Eclipse CDT4 - MinGW Makefiles" -DCMAKE_ECLIPSE_MAKE_ARGUMENTS="-j%NUMBER_OF_PROCESSORS% -s" -DFMOD_ROOT=<Path to fmod> -DGTEST=<Path to gtest>```
+* Project ready for you so you can run Eclipse and import exist project

@@ -451,12 +451,7 @@ void game_end()
 	     iter != MyList.end();
 	     ++iter)
 	{
-		if ((*iter))
-		{
-			delete (*iter);
-		}
-
-		(*iter) = NULL;
+		delete (*iter);
 	}
 
 	MyList.clear();
