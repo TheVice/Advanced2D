@@ -3,7 +3,6 @@
 #include "Texture.h"
 #include "Font.h"
 #include "Console.h"
-#include "pthread_wrapper.h"
 #include <stdio.h>
 #include <dinput.h>
 
@@ -11,70 +10,39 @@
 #define SCREENH 768
 #define OBJECT_BACKGROUND 1
 #define OBJECT_SPRITE 100
-#define MAX_PR 50
-#define SCALE 70
-#define MAXTHREAD 2
+#define MAX_PR 5000
+#define SCALE 20
 
 static Advanced2D::Texture* circle_image = NULL;
 static Advanced2D::Font* font = NULL;
 static Advanced2D::Console* console = NULL;
-static pthread_t threads[MAXTHREAD];
-static bool done = false;
-static int thread_counter = 0;
-void* thread_function(void* data);
-#ifdef _MSC_VER
-static pthread_mutex_t mutex;
-#else
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-#endif
-static int thread_waits = 0;
-static int collisions = 0;
-
-void* thread_function(void*)
-{
-	while (!done)
-	{
-#ifdef _MSC_VER
-		pthread_mutex_lock(&mutex);
-#else
-
-		if (pthread_mutex_lock(&mutex) != 0)
-		{
-			thread_waits++;
-		}
-
-#endif
-		thread_counter++;
-		Advanced2D::Vector3<float> vector1(100.0f, 200.0f, 300.0f);
-		Advanced2D::Vector3<float> vector2(400.0f, 500.0f, 600.0f);
-		double dist = vector1.distance2d(vector2);
-		/*double dist_squared = */pow(dist, 2);
-		/*double square_root_of_dist = */sqrt(dist);
-		/*double answer = square_root_of_dist;*/
-#ifdef _MSC_VER
-		pthread_mutex_unlock(&mutex);
-#else
-
-		if (pthread_mutex_unlock(&mutex) != 0)
-		{
-			thread_waits++;
-		}
-
-#endif
-	}
-
-	pthread_exit(NULL);
-	return NULL;
-}
 
 bool game_preload()
 {
-	Advanced2D::Engine::setAppTitle(TEXT("Thread Demo"));
+	Advanced2D::Engine::setAppTitle(TEXT("Engine Thread Demo"));
 	Advanced2D::Engine::setFullScreen(false);
 	Advanced2D::Engine::setScreenWidth(SCREENW);
 	Advanced2D::Engine::setScreenHeight(SCREENH);
 	Advanced2D::Engine::setColorDepth(32);
 	return true;
+}
+
+void add_sprite()
+{
+	Advanced2D::Sprite* sprite = new Advanced2D::Sprite();
+	sprite->setObjectType(OBJECT_SPRITE);
+	sprite->setImage(circle_image);
+	D3DCOLOR color = D3DCOLOR_RGBA(0, rand() % 255, rand() % 255, rand() % 100);
+	sprite->setColor(color);
+	sprite->setSize(128, 128);
+	sprite->setScale((rand() % SCALE + SCALE / 4) / 100.0f);
+	sprite->setPosition2d(static_cast<float>(rand() % SCREENW),
+	                      static_cast<float>(rand() % SCREENH));
+	sprite->setCollidable(false);
+	sprite->setLifeTime(rand() % 30000);
+	sprite->setVelocity(static_cast<float>(rand() % 30 - 15) / 10.0f,
+	                    static_cast<float>(rand() % 30 - 15) / 10.0f);
+	g_engine->addEntity(sprite);
 }
 
 bool game_init()
@@ -89,6 +57,7 @@ bool game_init()
 	}
 
 	background->setObjectType(OBJECT_BACKGROUND);
+	background->setCollidable(false);
 	g_engine->addEntity(background);
 	console = new Advanced2D::Console();
 	console->setShowing(true);
@@ -107,17 +76,7 @@ bool game_init()
 
 	for (int n = 0; n < MAX_PR; ++n)
 	{
-		Advanced2D::Sprite* sprite = new Advanced2D::Sprite();
-		sprite->setObjectType(OBJECT_SPRITE);
-		sprite->setImage(circle_image);
-		sprite->setSize(128, 128);
-		sprite->setScale((rand() % SCALE + SCALE / 4) / 100.0f);
-		sprite->setPosition2d(static_cast<float>(rand() % SCREENW),
-		                      static_cast<float>(rand() % SCREENH));
-		sprite->setCollisionMethod(Advanced2D::COLLISION_DIST);
-		sprite->setVelocity(static_cast<float>(rand() % 30 - 15) / 10.0f,
-		                    static_cast<float>(rand() % 30 - 15) / 10.0f);
-		g_engine->addEntity(sprite);
+		add_sprite();
 	}
 
 	try
@@ -140,22 +99,19 @@ bool game_init()
 
 	font->setColumns(16);
 	font->setSize(20, 16);
-#ifdef _MSC_VER
-	pthread_mutex_init(&mutex, NULL);
-#endif
-
-	for (int n = 0; n < MAXTHREAD; ++n)
-	{
-		int mythread_id = n;
-		pthread_create(&threads[n], NULL, thread_function,
-		               reinterpret_cast<void*>(&mythread_id));
-	}
-
+	g_engine->setMaximizeProcessor(true);
 	return true;
 }
 
 void updateConsole()
 {
+	static Advanced2D::Timer timer;
+
+	if (!timer.stopwatch(50))
+	{
+		return;
+	}
+
 	_TCHAR szText[64 * sizeof(_TCHAR)];
 	int y = 0;
 	console->print(Advanced2D::Engine::getVersionText().c_str(), y++);
@@ -181,21 +137,6 @@ void updateConsole()
 	          static_cast<float>(g_engine->getFrameRate_core()));
 #endif
 	console->print(szText, y++);
-#if _MSC_VER > 1310
-	_stprintf_s(szText, sizeof(szText) / sizeof(*szText),
-	            TEXT("THREAD COUTER : %i"), thread_counter);
-#else
-	_stprintf(szText, TEXT("THREAD COUTER : %i"),
-	          thread_counter);
-#endif
-	console->print(szText, y++);
-#if _MSC_VER > 1310
-	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("THREAD WAITS : %i"),
-	            thread_waits);
-#else
-	_stprintf(szText, TEXT("THREAD WAITS : %i"), thread_waits);
-#endif
-	console->print(szText, y++);
 	console->print(TEXT("Press F2 to toggle Processor Throttling"), y++);
 #if _MSC_VER > 1310
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText), TEXT("Entities : %i"),
@@ -209,10 +150,8 @@ void updateConsole()
 
 void game_update()
 {
-	pthread_mutex_lock(&mutex);
+	add_sprite();
 	updateConsole();
-	collisions = 0;
-	pthread_mutex_unlock(&mutex);
 }
 
 void game_entityUpdate(Advanced2D::Entity* aEntity)
@@ -262,51 +201,8 @@ void game_entityRender(Advanced2D::Entity*)
 {
 }
 
-void game_entityCollision(Advanced2D::Entity* aEntity1,
-                          Advanced2D::Entity* aEntity2)
+void game_entityCollision(Advanced2D::Entity*, Advanced2D::Entity*)
 {
-	if (aEntity1->getObjectType() != OBJECT_SPRITE ||
-	    aEntity2->getObjectType() != OBJECT_SPRITE)
-	{
-		return;
-	}
-
-	collisions++;
-	Advanced2D::Sprite* a = static_cast<Advanced2D::Sprite*>(aEntity1);
-	Advanced2D::Sprite* b = static_cast<Advanced2D::Sprite*>(aEntity2);
-	float x1 = a->getPosition().mX;
-	float y1 = a->getPosition().mY;
-	float x2 = b->getPosition().mX;
-	float y2 = b->getPosition().mY;
-	float vx1 = a->getVelocity().mX;
-	float vy1 = a->getVelocity().mY;
-	float vx2 = b->getVelocity().mX;
-	float vy2 = b->getVelocity().mY;
-
-	if (x1 < x2)
-	{
-		vx1 = fabs(vx1) * (-1);
-		vx2 = fabs(vx2);
-	}
-	else if (x1 > x2)
-	{
-		vx1 = fabs(vx1);
-		vx2 = fabs(vx2) * (-1);
-	}
-
-	if (y1 < y2)
-	{
-		vy1 = fabs(vy1) * (-1);
-		vy2 = fabs(vy2);
-	}
-	else if (y1 > y2)
-	{
-		vy1 = fabs(vy1);
-		vy2 = fabs(vy2) * (-1);
-	}
-
-	a->setVelocity(vx1, vy1);
-	b->setVelocity(vx2, vy2);
 }
 
 void game_keyPress(int)
@@ -366,25 +262,6 @@ void game_render3d()
 
 void game_end()
 {
-	std::list<Advanced2D::Entity*> MyList = (*g_engine->getEntityList());
-
-	for (std::list<Advanced2D::Entity*>::iterator iter = MyList.begin();
-	     iter != MyList.end();
-	     ++iter)
-	{
-		delete (*iter);
-	}
-
-	MyList.clear();
-	done = true;
-
-	for (int n = 0; n < MAXTHREAD; ++n)
-	{
-		void* ret = NULL;
-		pthread_join(threads[n], &ret);
-	}
-
-	pthread_mutex_destroy(&mutex);
 	delete font;
 	font = NULL;
 	delete console;

@@ -191,8 +191,8 @@ void Engine::updateMouse()
 
 void Engine::updateEntities()
 {
-	for (std::list<Entity*>::iterator iter = mEntities.begin();
-	     iter != mEntities.end(); ++iter)
+	for (std::list<Entity*>::iterator iter = getEntityList()->begin();
+	     iter != getEntityList()->end(); ++iter)
 	{
 		Entity* entity = *iter;
 
@@ -214,8 +214,8 @@ void Engine::updateEntities()
 
 void Engine::draw2DEntities()
 {
-	for (std::list<Entity*>::iterator iter = mEntities.begin();
-	     iter != mEntities.end(); ++iter)
+	for (std::list<Entity*>::iterator iter = getEntityList()->begin();
+	     iter != getEntityList()->end(); ++iter)
 	{
 		Entity* entity = *iter;
 
@@ -234,8 +234,8 @@ void Engine::draw2DEntities()
 
 void Engine::draw3DEntities()
 {
-	for (std::list<Entity*>::iterator iter = mEntities.begin();
-	     iter != mEntities.end(); ++iter)
+	for (std::list<Entity*>::iterator iter = getEntityList()->begin();
+	     iter != getEntityList()->end(); ++iter)
 	{
 		Entity* entity = *iter;
 
@@ -254,14 +254,14 @@ void Engine::draw3DEntities()
 
 void Engine::buryEntities()
 {
-	std::list<Entity*>::iterator iter = mEntities.begin();
+	std::list<Entity*>::iterator iter = getEntityList()->begin();
 
-	while (iter != mEntities.end())
+	while (iter != getEntityList()->end())
 	{
 		if ((*iter)->isAlive() == false)
 		{
 			delete (*iter);
-			iter = mEntities.erase(iter);
+			iter = getEntityList()->erase(iter);
 		}
 		else
 		{
@@ -356,8 +356,8 @@ bool Engine::collisionD(Sprite* aSprite1, Sprite* aSprite2)
 
 void Engine::testForCollisions2D()
 {
-	for (std::list<Entity*>::iterator first = mEntities.begin();
-	     first != mEntities.end(); ++first)
+	for (std::list<Entity*>::iterator first = getEntityList()->begin();
+	     first != getEntityList()->end(); ++first)
 	{
 		Sprite* spr1 = static_cast<Sprite*>((*first));
 
@@ -372,8 +372,8 @@ void Engine::testForCollisions2D()
 			continue;
 		}
 
-		for (std::list<Entity*>::iterator second = mEntities.begin();
-		     second != mEntities.end(); ++second)
+		for (std::list<Entity*>::iterator second = getEntityList()->begin();
+		     second != getEntityList()->end(); ++second)
 		{
 			Sprite* spr2 = static_cast<Sprite*>((*second));
 
@@ -413,8 +413,16 @@ Engine::Engine(HWND aWindowHandle) :
 	mFrameRateReal(0),
 	mInput(NULL),
 	mAudio(NULL),
+#ifndef MULTI_THREAD_ENGINE
 	mEntities(),
 	mCollisionTimer()
+#else
+	mEntities(NULL),
+	mCollisionTimer(),
+	mTimerUpdate(),
+	m_thread_bury_entities(),
+	mMutex()
+#endif
 {
 	mDirect3d = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -496,6 +504,18 @@ Engine::Engine(HWND aWindowHandle) :
 	{
 		throw new std::exception();
 	}
+
+#ifdef MULTI_THREAD_ENGINE
+	mEntities = new std::list<Entity*>();
+#ifdef _MSC_VER
+	pthread_mutex_init(&mMutex, NULL);
+#else
+	mMutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+	int threadid = 1;
+	pthread_create(&m_thread_bury_entities, NULL, thread_function_bury_entities,
+	               reinterpret_cast<void*>(&threadid));
+#endif
 }
 
 HWND Engine::getWindowHandle()
@@ -645,7 +665,9 @@ void Engine::setMaximizeProcessor(bool aMaximizeProcessor)
 
 void Engine::update()
 {
-	static Timer timedUpdate;
+#ifndef MULTI_THREAD_ENGINE
+	static Timer timerUpdate;
+#endif
 	//calculate core framerate
 	mFrameCountCore++;
 
@@ -655,6 +677,7 @@ void Engine::update()
 		mFrameCountCore = 0;
 	}
 
+#ifndef MULTI_THREAD_ENGINE
 	//fast update with no timing
 	game_update();
 
@@ -670,8 +693,37 @@ void Engine::update()
 		}
 	}
 
+#else
+	//fast update with no timing
+	pthread_mutex_lock(&mMutex);
+	game_update();
+	pthread_mutex_unlock(&mMutex);
+	//update entities
+	pthread_mutex_lock(&mMutex);
+
+	if (!mPause)
+	{
+		updateEntities();
+	}
+
+	pthread_mutex_unlock(&mMutex);
+
+	//perfome global collision testing at 20 Hz
+	if (!mPause && mCollisionTimer.stopwatch(50))
+	{
+		pthread_mutex_lock(&mMutex);
+		testForCollisions2D();
+		pthread_mutex_unlock(&mMutex);
+	}
+
+#endif
 	//update with 60fps timing
-	if (!timedUpdate.stopwatch(14))
+#ifndef MULTI_THREAD_ENGINE
+
+	if (!timerUpdate.stopwatch(14))
+#else
+	if (!mTimerUpdate.stopwatch(14))
+#endif
 	{
 		if (!getMaximizeProcessor())
 		{
@@ -697,6 +749,9 @@ void Engine::update()
 		mAudio->update();
 		//begin rendering
 		renderStart();
+#ifdef MULTI_THREAD_ENGINE
+		pthread_mutex_lock(&mMutex);
+#endif
 		//let game do it's own 3D
 		game_render3d();
 
@@ -705,38 +760,58 @@ void Engine::update()
 			draw3DEntities();
 		}
 
+#ifndef MULTI_THREAD_ENGINE
 		//2D rendering
 		render2dStart();
+#else
+		pthread_mutex_unlock(&mMutex);
+		//2D rendering
+		render2dStart();
+		pthread_mutex_lock(&mMutex);
+#endif
 
 		if (!mPause)
 		{
 			draw2DEntities();
 		}
 
+#ifndef MULTI_THREAD_ENGINE
 		game_render2d();
+#else
+		pthread_mutex_unlock(&mMutex);
+		pthread_mutex_lock(&mMutex);
+		game_render2d();
+		pthread_mutex_unlock(&mMutex);
+#endif
 		render2dStop();
 		//done rendering
 		renderStop();
 	}
 
+#ifndef MULTI_THREAD_ENGINE
 	//remove dead entities from the list
 	buryEntities();
+#endif
 }
 
 std::list<Entity*>* Engine::getEntityList()
 {
+#ifndef MULTI_THREAD_ENGINE
 	return &mEntities;
+#else
+	return mEntities;
+#endif
 }
 
 void Engine::addEntity(Entity* aEntity)
 {
-	mEntities.push_back(aEntity);
+	getEntityList()->push_back(aEntity);
 }
 
 Entity* Engine::findEntity(const _TCHAR* aEntityName)
 {
-	for (std::list<Entity*>::iterator iter = mEntities.begin();
-	     iter != mEntities.end(); ++iter)
+	for (std::list<Entity*>::iterator iter = getEntityList()->begin();
+	     iter != getEntityList()->end(); ++iter)
 	{
 		if ((*iter)->isAlive() && 0 == _tcscmp((*iter)->getName(), aEntityName))
 		{
@@ -749,8 +824,8 @@ Entity* Engine::findEntity(const _TCHAR* aEntityName)
 
 Entity* Engine::findEntity(int aEntityType)
 {
-	for (std::list<Entity*>::iterator iter = mEntities.begin();
-	     iter != mEntities.end(); ++iter)
+	for (std::list<Entity*>::iterator iter = getEntityList()->begin();
+	     iter != getEntityList()->end(); ++iter)
 	{
 		if ((*iter)->isAlive() && (*iter)->getObjectType() == aEntityType)
 		{
@@ -763,6 +838,26 @@ Entity* Engine::findEntity(int aEntityType)
 
 Engine::~Engine()
 {
+#ifdef MULTI_THREAD_ENGINE
+	void* ret = NULL;
+	pthread_join(m_thread_bury_entities, &ret);
+	pthread_mutex_destroy(&mMutex);
+
+	//delete managed entities
+	if (mEntities)
+	{
+		for (std::list<Entity*>::iterator iter = mEntities->begin();
+		     iter != mEntities->end(); ++iter)
+		{
+			delete (*iter);
+		}
+
+		mEntities->clear();
+		delete mEntities;
+		mEntities = NULL;
+	}
+
+#endif
 	delete mInput;
 	mInput = NULL;
 
@@ -784,5 +879,40 @@ Engine::~Engine()
 		mDirect3d->Release();
 	}
 }
+
+#ifdef MULTI_THREAD_ENGINE
+void* thread_function_bury_entities(void*)
+{
+	static Timer timer;
+
+	while (!gameover)
+	{
+		if (timer.stopwatch(2000))
+		{
+			pthread_mutex_lock(&g_engine->mMutex);
+			std::list<Entity*>::iterator iter = g_engine->getEntityList()->begin();
+
+			while (iter != g_engine->getEntityList()->end())
+			{
+				if (!(*iter)->isAlive())
+				{
+					delete (*iter);
+					(*iter) = NULL;
+					iter = g_engine->getEntityList()->erase(iter);
+				}
+				else
+				{
+					++iter;
+				}
+			}
+
+			pthread_mutex_unlock(&g_engine->mMutex);
+		}
+	}
+
+	pthread_exit(NULL);
+	return NULL;
+}
+#endif
 
 }

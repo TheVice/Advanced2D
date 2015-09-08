@@ -96,6 +96,7 @@ cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x080
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Collision_Demo_BR.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Collision_Demo_D.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Console_Demo.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
+cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Engine_Thread_Demo.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS /out:"%CURRENT_DIR%\build\MSVC%MSVC_VER%\Engine_Thread_Demo_ST.exe"
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Font_Demo.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\HelloAdvanced2D.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Input_Demo.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
@@ -113,6 +114,27 @@ cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x080
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Test_Vector3.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Thread_Demo.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
 cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Velocity_Demo.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS
+
+:DIRECT_CL_BUILD_MT
+set CPP_FILES=
+for %%x in ("%CURRENT_DIR%\src\Ch\Engine\src\*.cpp") do set CPP_FILES=!CPP_FILES! "%%x"
+set CPP_FILES=%CPP_FILES:~1%
+cl /analyze /W4 /EHsc /c /GS /D "WIN32" /D "_WINDOWS" /D "_LIB" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" /D "MULTI_THREAD_ENGINE" %CPP_FILES% /I "%CURRENT_DIR%\src\Ch\Engine\inc"
+
+set OBJ_FILES=
+for %%x in ("%CURRENT_DIR%\build\MSVC%MSVC_VER%\*.obj") do set OBJ_FILES=!OBJ_FILES! "%%x"
+set OBJ_FILES=%OBJ_FILES:~1%
+
+lib > nul
+if %ERRORLEVEL% NEQ 0 goto NO_LIB_MT
+lib %OBJ_FILES% /out:"%CURRENT_DIR%\build\MSVC%MSVC_VER%\Engine_MT.lib"
+goto DONE_ENGINE_MT
+
+:NO_LIB_MT
+link /lib %OBJ_FILES% /out:"%CURRENT_DIR%\build\MSVC%MSVC_VER%\Engine_MT.lib"
+
+:DONE_ENGINE_MT
+cl /analyze /W4 /EHsc /GS /D "WIN32" /D "_WINDOWS" /D "DIRECTINPUT_VERSION=0x0800" /D "M_PI=3.14159265358979323846" /D "M_PI_4=0.785398163397448309616" "%CURRENT_DIR%\src\Ch\Samples\Engine_Thread_Demo.cpp" kernel32.lib user32.lib d3d9.lib d3dx9.lib dxguid.lib dinput8.lib winmm.lib Engine_MT.lib "%FMOD_LIB%" /I "%CURRENT_DIR%\src\Ch\Engine\inc" /link /SafeSEH /DynamicBase /NXCompat /SUBSYSTEM:WINDOWS /out:"%CURRENT_DIR%\build\MSVC%MSVC_VER%\Engine_Thread_Demo_MT.exe"
 
 :END_BUILD
 cd %CURRENT_DIR%

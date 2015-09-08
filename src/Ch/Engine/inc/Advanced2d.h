@@ -2,6 +2,9 @@
 #define __ADVANCED2D_H_
 
 #include "Timer.h"
+#ifdef MULTI_THREAD_ENGINE
+#include "pthread_wrapper.h"
+#endif
 #include <string>
 #include <list>
 #include <tchar.h>
@@ -65,7 +68,11 @@ private:
 	void draw3DEntities();
 	void buryEntities();
 
+#ifndef MULTI_THREAD_ENGINE
 	std::list<Entity*> mEntities;
+#else
+	std::list<Entity*>* mEntities;
+#endif
 
 	Timer mCollisionTimer;
 
@@ -73,6 +80,11 @@ private:
 	bool collisionBR(Sprite* aSprite1, Sprite* aSprite2);
 	bool collisionD(Sprite* aSprite1, Sprite* aSprite2);
 	void testForCollisions2D();
+
+#ifdef MULTI_THREAD_ENGINE
+	Timer mTimerUpdate;
+	pthread_t m_thread_bury_entities;
+#endif
 
 	Engine();
 	Engine(const Engine& aRhs);
@@ -105,6 +117,9 @@ public:
 	                        const _TCHAR* aTitle = TEXT("ADVANCED 2D"));
 	static void showFatalMessage(const _TCHAR* aMessage,
 	                             const _TCHAR* aTitle = TEXT("FATAL ERROR"));
+#ifdef MULTI_THREAD_ENGINE
+	pthread_mutex_t mMutex;
+#endif
 
 	Engine(HWND aWindowHandle);
 	HWND getWindowHandle();
@@ -143,6 +158,9 @@ public:
 
 	virtual ~Engine();
 };
+#ifdef MULTI_THREAD_ENGINE
+void* thread_function_bury_entities(void* aData);
+#endif
 }
 
 extern bool gameover;

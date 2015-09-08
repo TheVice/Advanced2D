@@ -74,10 +74,18 @@ if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${Chapter})
   add_library(${libraryName}_ANSI STATIC ${INC_FILES} ${SRC_FILES})
   target_include_directories(${libraryName}_ANSI PRIVATE ${INC_FOLDER})
 
+  add_library(${libraryName}_MT_ANSI STATIC ${INC_FILES} ${SRC_FILES})
+  target_include_directories(${libraryName}_MT_ANSI PRIVATE ${INC_FOLDER})
+  set_target_properties(${libraryName}_MT_ANSI PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DMULTI_THREAD_ENGINE")
+
   if(MSVC)
     add_library(${libraryName}_Unicode STATIC ${INC_FILES} ${SRC_FILES})
     target_include_directories(${libraryName}_Unicode PRIVATE ${INC_FOLDER})
     set_target_properties(${libraryName}_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
+
+    add_library(${libraryName}_MT_Unicode STATIC ${INC_FILES} ${SRC_FILES})
+    target_include_directories(${libraryName}_MT_Unicode PRIVATE ${INC_FOLDER})
+    set_target_properties(${libraryName}_MT_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE -DMULTI_THREAD_ENGINE")
   endif(MSVC)
 
   file(GLOB Samples RELATIVE ${chapterPath}/Samples ${chapterPath}/Samples/*.cpp)
@@ -102,6 +110,23 @@ if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${Chapter})
         target_link_libraries(${sampleName}_Unicode ${libraryName}_Unicode ${REQUIRED_LIBRARIES})
         target_include_directories(${sampleName}_Unicode PRIVATE ${INC_FOLDER})
         set_target_properties(${sampleName}_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
+      endif(MSVC)
+
+      if(MSVC)
+        add_executable(${sampleName}_MT_ANSI WIN32 ${chapterPath}/Samples/${Sample})
+        add_executable(${sampleName}_MT_Unicode WIN32 ${chapterPath}/Samples/${Sample})
+        set_target_properties(${sampleName}_MT_Unicode PROPERTIES LINK_FLAGS "${LINK_FLAGS} /ENTRY:\"wWinMainCRTStartup\"")
+      else()
+        add_executable(${sampleName}_MT_ANSI ${chapterPath}/Samples/${Sample})
+      endif(MSVC)
+
+      target_link_libraries(${sampleName}_MT_ANSI ${libraryName}_MT_ANSI ${REQUIRED_LIBRARIES})
+      target_include_directories(${sampleName}_MT_ANSI PRIVATE ${INC_FOLDER})
+
+      if(MSVC)
+        target_link_libraries(${sampleName}_MT_Unicode ${libraryName}_MT_Unicode ${REQUIRED_LIBRARIES})
+        target_include_directories(${sampleName}_MT_Unicode PRIVATE ${INC_FOLDER})
+        set_target_properties(${sampleName}_MT_Unicode PROPERTIES COMPILE_FLAGS "${COMPILE_FLAGS} -DUNICODE -D_UNICODE")
       endif(MSVC)
 
     endif(NOT IS_DIRECTORY ${chapterPath}/Samples/${Sample})
