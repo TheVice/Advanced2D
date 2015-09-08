@@ -21,7 +21,7 @@ static Advanced2D::Font* font = NULL;
 static Advanced2D::Console* console = NULL;
 static pthread_t threads[MAXTHREAD];
 static bool done = false;
-static unsigned long thread_counter = 0;
+static int thread_counter = 0;
 void* thread_function(void* data);
 #ifdef _MSC_VER
 static pthread_mutex_t mutex;
@@ -184,9 +184,10 @@ void updateConsole()
 	console->print(szText, y++);
 #if _MSC_VER > 1310
 	_stprintf_s(szText, sizeof(szText) / sizeof(*szText),
-	            TEXT("THREAD COUTER : %i"), static_cast<int>(thread_counter));
+	            TEXT("THREAD COUTER : %i"), thread_counter);
 #else
-	_stprintf(szText, TEXT("THREAD COUTER : %ld"), static_cast<int>(thread_counter));
+	_stprintf(szText, TEXT("THREAD COUTER : %i"),
+	          thread_counter);
 #endif
 	console->print(szText, y++);
 #if _MSC_VER > 1310
